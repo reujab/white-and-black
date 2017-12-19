@@ -7,7 +7,7 @@ shell.ln("-sf", "../favicon.jpg", "dist/favicon.jpg")
 module.exports = {
 	devtool: "source-map",
 	entry: {
-		index: "./src/index.js",
+		index: "./src/index.jsx",
 	},
 	output: {
 		filename: "[name].js",
@@ -22,6 +22,10 @@ module.exports = {
 					"css-loader?sourceMap&minimize",
 					"sass-loader?sourceMap",
 				],
+			},
+			{
+				test: /\.jsx$/,
+				use: "babel-loader?presets=react",
 			},
 		],
 	},
