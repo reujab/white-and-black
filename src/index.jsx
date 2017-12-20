@@ -15,12 +15,12 @@ if (navigator.standalone) {
 addEventListener("DOMContentLoaded", () => {
 	ReactDOM.render([
 		<AppBar key="appbar" position="static" style={{
-			marginBottom: "10px",
+			marginBottom: 10,
 		}}>
 			<Toolbar>
 				<IconButton disabled={true} style={{
 					borderRadius: 0,
-					marginRight: "10px",
+					marginRight: 10,
 				}}>
 					<img src="/static/favicon.png" style={{
 						width: "100%",
