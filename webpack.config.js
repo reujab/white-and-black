@@ -16,16 +16,16 @@ module.exports = {
 	module: {
 		rules: [
 			{
+				test: /\.jsx$/,
+				use: "babel-loader?presets=react",
+			},
+			{
 				test: /\.sass$/,
 				use: [
 					"style-loader",
 					"css-loader?sourceMap&minimize",
 					"sass-loader?sourceMap",
 				],
-			},
-			{
-				test: /\.jsx$/,
-				use: "babel-loader?presets=react",
 			},
 		],
 	},
