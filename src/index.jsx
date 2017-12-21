@@ -9,10 +9,6 @@ import Settings from "./Settings"
 import Toolbar from "material-ui/Toolbar"
 import Typography from "material-ui/Typography"
 
-if (navigator.standalone) {
-	document.documentElement.classList.add("standalone")
-}
-
 addEventListener("DOMContentLoaded", () => {
 	ReactDOM.render([
 		<AppBar key="appbar" position="static" style={{
