@@ -7,6 +7,7 @@ module.exports = {
 	devtool: "source-map",
 	entry: {
 		index: "./src/index.jsx",
+		game: "./src/game.jsx",
 	},
 	output: {
 		filename: "[name].js",

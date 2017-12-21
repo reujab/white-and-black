@@ -85,6 +85,17 @@ func main() {
 		games = append(games, game)
 		res.Write([]byte(game.ID))
 	}).Methods("POST")
+	router.HandleFunc(`/{id:[a-z\d]{20}}`, func(res http.ResponseWriter, req *http.Request) {
+		id := mux.Vars(req)["id"]
+		for _, game := range games {
+			if game.ID == id {
+				die(templates.ExecuteTemplate(res, "game.tmpl", nil))
+				return
+			}
+		}
+
+		http.NotFound(res, req)
+	})
 	log.Println("Listening to :8080")
 	panic(http.ListenAndServe(":8080", httplogger.Wrap(router.ServeHTTP, func(req *httplogger.Request) {
 		log.Println(req.IP, req.Method, req.URL, req.Status, req.Time)
