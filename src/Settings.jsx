@@ -1,5 +1,6 @@
 import React from "react"
 
+import Button from "material-ui/Button"
 import Checkbox from "material-ui/Checkbox"
 import Grid from "material-ui/Grid"
 import MiniCard from "./MiniCard"
@@ -9,6 +10,7 @@ import Typography from "material-ui/Typography"
 import {FormGroup, FormControlLabel} from "material-ui/Form"
 
 import deckMetadata from "./deck-metadata"
+import superagent from "superagent"
 
 class Settings extends React.Component {
 	constructor(props) {
@@ -74,8 +76,23 @@ class Settings extends React.Component {
 					<MiniCard color="black">{this.state.blackCards}</MiniCard>
 					<MiniCard color="white">{this.state.whiteCards}</MiniCard>
 				</Grid>
+
+				<Grid item xs={12}>
+					<Button raised onClick={this.submit.bind(this)}>Create Game</Button>
+				</Grid>
 			</Grid>
 		)
+	}
+
+	async submit() {
+		const res = await superagent.
+			post("/create-game").
+			send({
+				scoreLimit: this.state.scoreLimit,
+				blankCards: this.state.blankCards,
+				decks: this.state.decks,
+			})
+		location.href = `/${res.text}`
 	}
 }
 
