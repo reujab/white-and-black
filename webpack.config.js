@@ -1,4 +1,6 @@
+const UglifyJS = require("uglifyjs-webpack-plugin")
 const shell = require("shelljs")
+const webpack = require("webpack")
 
 shell.mkdir("-p", "dist")
 shell.ln("-sf", "../favicon.png", "dist/favicon.png")
@@ -32,4 +34,10 @@ module.exports = {
 	resolve: {
 		extensions: [".js", ".json", ".jsx"],
 	},
+	plugins: process.env.NODE_ENV === "production" ? [
+		new webpack.DefinePlugin({
+			"process.env.NODE_ENV": JSON.stringify("production"),
+		}),
+		new UglifyJS(),
+	] : [],
 }
