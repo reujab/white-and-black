@@ -1,6 +1,6 @@
 import "./main.sass"
 
-import React from "react"
+import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 
 import Header from "./Header"
@@ -16,10 +16,12 @@ class Index extends React.Component {
 	}
 
 	render() {
-		return [
-			<Header key="header" username={this.state.username} onUsernameChange={this.resetUsername.bind(this)}/>,
-			<Settings key="settings" />,
-		]
+		return (
+			<Fragment>
+				<Header username={this.state.username} onUsernameChange={this.resetUsername.bind(this)}/>
+				<Settings />
+			</Fragment>
+		)
 	}
 
 	resetUsername() {

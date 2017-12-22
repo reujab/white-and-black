@@ -11,7 +11,7 @@ import {
 class Header extends React.Component {
 	render() {
 		return (
-			<AppBar key="header" position="static" style={{
+			<AppBar position="static" style={{
 				marginBottom: 10,
 			}}>
 				<Toolbar>

@@ -1,6 +1,6 @@
 import "./main.sass"
 
-import React from "react"
+import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 
 import Header from "./Header"
@@ -15,11 +15,19 @@ class Game extends React.Component {
 		}
 	}
 
+	componentWillMount() {
+		if (this.state.username) {
+			this.setUsername(this.state.username)
+		}
+	}
+
 	render() {
-		return [
-			<UsernamePicker key="usernamePicker" username={this.state.username} onChange={this.setUsername.bind(this)} />,
-			<Header key="header" username={this.state.username} />,
-		]
+		return (
+			<Fragment>
+				<UsernamePicker username={this.state.username} onChange={this.setUsername.bind(this)} />
+				<Header username={this.state.username} />
+			</Fragment>
+		)
 	}
 
 	setUsername(username) {
