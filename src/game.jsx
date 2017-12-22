@@ -12,6 +12,7 @@ class Game extends React.Component {
 
 		this.state = {
 			username: localStorage.username || "",
+			usernameError: "",
 		}
 	}
 
@@ -24,7 +25,7 @@ class Game extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<UsernamePicker username={this.state.username} onChange={this.setUsername.bind(this)} />
+				<UsernamePicker error={this.state.usernameError} username={this.state.username} onChange={this.setUsername.bind(this)} />
 				<Header username={this.state.username} />
 			</Fragment>
 		)
@@ -34,9 +35,25 @@ class Game extends React.Component {
 		localStorage.username = username
 		this.setState({
 			username,
+			usernameError: "",
 		})
 
-		// TODO: connect to websocket
+		const ws = new WebSocket(`ws://${location.host + location.pathname}/ws`)
+		ws.onopen = () => {
+			ws.send(username)
+		}
+		ws.onmessage = (e) => {
+			switch (e.data) {
+			case "err:taken":
+				this.setState({
+					username: "",
+					usernameError: "Username taken",
+				})
+				break
+			default:
+				console.error("Unknown message", e)
+			}
+		}
 	}
 }
 

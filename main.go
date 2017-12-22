@@ -1,23 +1,21 @@
 package main
 
 import (
-	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
-	"regexp"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	"github.com/reujab/httplogger"
-	"github.com/rs/xid"
 )
 
 // Game represents a game.
 type Game struct {
 	ID         string
-	ScoreLimit int
+	ScoreLimit uint
 	Deck       Deck
+	Players    []*Player
 }
 
 var games []Game
@@ -28,7 +26,11 @@ type Deck struct {
 	White []string
 }
 
-var deckRegex = regexp.MustCompile(`^[a-z\d ]+$`)
+// Player represents a player.
+type Player struct {
+	Username string
+	WS       *websocket.Conn
+}
 
 var templates = template.Must(template.ParseGlob("src/*.tmpl"))
 
@@ -38,64 +40,26 @@ func main() {
 	router.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		die(templates.ExecuteTemplate(res, "index.tmpl", nil))
 	}).Methods("GET")
-	router.HandleFunc("/create-game", func(res http.ResponseWriter, req *http.Request) {
-		var settings struct {
-			ScoreLimit int
-			BlankCards int
-			Decks      []string
-		}
-		err := json.NewDecoder(req.Body).Decode(&settings)
-		if err != nil {
-			http.Error(res, "Bad Request", 400)
-			return
-		}
-
-		game := Game{
-			ID:         xid.New().String(),
-			ScoreLimit: settings.ScoreLimit,
-		}
-		for _, name := range settings.Decks {
-			if !deckRegex.MatchString(name) {
-				http.Error(res, "Bad Request", 400)
-				return
-			}
-
-			file, err := os.Open("src/cards/" + name + ".json")
-			if err != nil {
-				http.Error(res, "Bad Request", 400)
-				return
-			}
-			defer file.Close()
-
-			var deck Deck
-			err = json.NewDecoder(file).Decode(&deck)
-			die(err)
-
-			game.Deck.Black = append(game.Deck.Black, deck.Black...)
-			game.Deck.White = append(game.Deck.White, deck.White...)
-		}
-		for i := 0; i < settings.BlankCards; i++ {
-			game.Deck.White = append(game.Deck.White, "_")
-		}
-		if len(game.Deck.Black) == 0 || len(game.Deck.White) == 0 {
-			http.Error(res, "Bad Request", 400)
-			return
-		}
-
-		games = append(games, game)
-		res.Write([]byte(game.ID))
-	}).Methods("POST")
+	router.HandleFunc("/create-game", createGame).Methods("POST")
 	router.HandleFunc(`/{id:[a-z\d]{20}}`, func(res http.ResponseWriter, req *http.Request) {
-		id := mux.Vars(req)["id"]
-		for _, game := range games {
-			if game.ID == id {
-				die(templates.ExecuteTemplate(res, "game.tmpl", nil))
-				return
-			}
+		if getGame(mux.Vars(req)["id"]) == nil {
+			http.NotFound(res, req)
+		} else {
+			die(templates.ExecuteTemplate(res, "game.tmpl", nil))
+		}
+	}).Methods("GET")
+	router.HandleFunc(`/{id:[a-z\d]{20}}/ws`, func(res http.ResponseWriter, req *http.Request) {
+		game := getGame(mux.Vars(req)["id"])
+		if game == nil {
+			http.NotFound(res, req)
+			return
 		}
 
-		http.NotFound(res, req)
-	})
+		ws, err := upgrader.Upgrade(res, req, nil)
+		die(err)
+		defer ws.Close()
+		handlePlayer(game, ws)
+	}).Methods("GET")
 	log.Println("Listening to :8080")
 	panic(http.ListenAndServe(":8080", httplogger.Wrap(router.ServeHTTP, func(req *httplogger.Request) {
 		log.Println(req.IP, req.Method, req.URL, req.Status, req.Time)
@@ -106,4 +70,13 @@ func die(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func getGame(id string) *Game {
+	for i, game := range games {
+		if game.ID == id {
+			return &games[i]
+		}
+	}
+	return nil
 }

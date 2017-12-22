@@ -39,7 +39,7 @@ class UsernamePicker extends React.Component {
 						</Grid>
 					</Grid>
 				</Dialog>
-				<Snackbar open={!!this.state.error} message={this.state.error} />
+				<Snackbar open={!!(this.state.error || this.props.error)} message={this.state.error || this.props.error} />
 			</Fragment>
 		)
 	}
@@ -72,6 +72,7 @@ class UsernamePicker extends React.Component {
 }
 
 UsernamePicker.propTypes = {
+	error: PropTypes.string,
 	username: PropTypes.string.isRequired,
 	onChange: PropTypes.func.isRequired,
 }
