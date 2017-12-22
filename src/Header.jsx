@@ -1,22 +1,43 @@
+import PropTypes from "prop-types"
 import React from "react"
 
-import AppBar from "material-ui/AppBar"
-import IconButton from "material-ui/IconButton"
-import Toolbar from "material-ui/Toolbar"
-import Typography from "material-ui/Typography"
+import {
+	AppBar,
+	IconButton,
+	Toolbar,
+	Typography,
+} from "material-ui"
 
-export default <AppBar key="header" position="static" style={{
-	marginBottom: 10,
-}}>
-	<Toolbar>
-		<IconButton disabled={true} style={{
-			borderRadius: 0,
-			marginRight: 10,
-		}}>
-			<img src="/static/favicon.png" style={{
-				width: "100%",
-			}} />
-		</IconButton>
-		<Typography type="title" color="inherit">White & Black</Typography>
-	</Toolbar>
-</AppBar>
+class Header extends React.Component {
+	render() {
+		return (
+			<AppBar key="header" position="static" style={{
+				marginBottom: 10,
+			}}>
+				<Toolbar>
+					<IconButton disabled={true} style={{
+						borderRadius: 0,
+						marginRight: 10,
+					}}>
+						<img src="/static/favicon.png" style={{
+							width: "100%",
+						}} />
+					</IconButton>
+					<Typography type="title" color="inherit" style={{
+						flexGrow: 1,
+					}}>White & Black</Typography>
+					<span onClick={this.props.onUsernameChange} style={{
+						cursor: this.props.onUsernameChange ? "pointer" : "default",
+					}}>{this.props.username}</span>
+				</Toolbar>
+			</AppBar>
+		)
+	}
+}
+
+Header.propTypes = {
+	username: PropTypes.string.isRequired,
+	onUsernameChange: PropTypes.func,
+}
+
+export default Header
