@@ -25,9 +25,13 @@ class Header extends React.Component {
 					</IconButton>
 					<Typography type="title" color="inherit" style={{
 						flexGrow: 1,
+						marginRight: 10,
+						whiteSpace: "nowrap",
 					}}>White & Black</Typography>
 					<span onClick={this.props.onUsernameChange} style={{
 						cursor: this.props.onUsernameChange ? "pointer" : "default",
+						overflow: "hidden",
+						textOverflow: "ellipsis",
 					}}>{this.props.username}</span>
 				</Toolbar>
 			</AppBar>
