@@ -1,13 +1,16 @@
 import React from "react"
 
-import Button from "material-ui/Button"
-import Checkbox from "material-ui/Checkbox"
-import Grid from "material-ui/Grid"
+import {
+	Button,
+	Checkbox,
+	Grid,
+	TextField,
+	Tooltip,
+	Typography,
+	FormGroup,
+	FormControlLabel,
+} from "material-ui"
 import MiniCard from "./MiniCard"
-import TextField from "material-ui/TextField"
-import Tooltip from "material-ui/Tooltip"
-import Typography from "material-ui/Typography"
-import {FormGroup, FormControlLabel} from "material-ui/Form"
 
 import deckMetadata from "./deck-metadata"
 import superagent from "superagent"
