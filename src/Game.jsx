@@ -6,7 +6,9 @@ import ReactDOM from "react-dom"
 import Snackbar from "material-ui/Snackbar"
 import UsernamePicker from "./UsernamePicker"
 import Header from "./Header"
+import Grid from "material-ui/Grid"
 import PlayerList from "./PlayerList"
+import Hand from "./Hand"
 
 class Game extends React.Component {
 	constructor(props) {
@@ -17,6 +19,8 @@ class Game extends React.Component {
 			username: localStorage.username || "",
 			started: true, // assume game has started until told otherwise
 			players: [],
+			hand: [],
+			selectedCard: null,
 		}
 	}
 
@@ -67,6 +71,11 @@ class Game extends React.Component {
 					players: res.players,
 				})
 				break
+			case "hand":
+				this.setState({
+					hand: res.hand,
+				})
+				break
 			default:
 				console.error("unknown msg", res)
 			}
@@ -87,12 +96,36 @@ class Game extends React.Component {
 					onError={(error) => this.setState({error})}
 				/>
 				<Header username={this.state.username} />
-				<PlayerList
-					username={this.state.username}
-					players={this.state.players}
-					started={this.state.started}
-					onStart={() => this.send({id: "start game"})}
-				/>
+				<Grid
+					container
+					style={{
+						margin: 0,
+						width: "100%",
+					}}
+				>
+					<Grid
+						item
+						xs={12}
+						md={3}
+						lg={2}
+					>
+						<PlayerList
+							username={this.state.username}
+							players={this.state.players}
+							started={this.state.started}
+							onStart={() => this.send({id: "start game"})}
+						/>
+					</Grid>
+					<Grid
+						item
+						xs={12}
+						md={12 - 3}
+						lg={12 - 2}
+						style={"orientation" in window ? {padding: 0} : {}}
+					>
+						<Hand selectedCard={this.state.selectedCard} onSelect={(selectedCard) => this.setState({selectedCard})}>{this.state.hand}</Hand>
+					</Grid>
+				</Grid>
 			</Fragment>
 		)
 	}

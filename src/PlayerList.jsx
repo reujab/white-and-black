@@ -1,7 +1,6 @@
 import PropTypes from "prop-types"
 import React from "react"
 
-import Grid from "material-ui/Grid"
 import List, {ListItem, ListItemIcon, ListItemText} from "material-ui/List"
 import Tooltip from "material-ui/Tooltip"
 import Star from "material-ui-icons/Star"
@@ -50,37 +49,22 @@ class PlayerList extends React.Component {
 		})
 
 		return (
-			<Grid
-				container
-				style={{
-					margin: 0,
-					width: "100%",
-				}}
-			>
-				<Grid
-					item
-					xs={12}
-					md={3}
-					lg={2}
-				>
-					<List>
-						{players}
-						{owner && !this.props.started && (
-							<Button
-								raised
-								disabled={online < 3}
-								style={{
-									marginTop: 10,
-									width: "100%",
-								}}
-								onClick={this.props.onStart}
-							>
+			<List>
+				{players}
+				{owner && !this.props.started && (
+					<Button
+						raised
+						disabled={online < 3}
+						style={{
+							marginTop: 10,
+							width: "100%",
+						}}
+						onClick={this.props.onStart}
+					>
 								Start Game
-							</Button>
-						)}
-					</List>
-				</Grid>
-			</Grid>
+					</Button>
+				)}
+			</List>
 		)
 	}
 }

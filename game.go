@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"math/rand"
+
 	"github.com/gorilla/websocket"
 	"github.com/k0kubun/pp"
 )
@@ -65,8 +68,49 @@ func (game *Game) Start() {
 		return
 	}
 
+	// kick every offline player
+	for i := len(game.Players) - 1; i != 0; i-- {
+		if game.Players[i].WS == nil {
+			game.Players = append(game.Players[:i], game.Players[i+1:]...)
+		}
+	}
+
+	// HACK: ensure there are enough cards
+	if len(game.Deck.White) < len(game.Players)*10 {
+		panic("not enough cards") // FIXME: properly handle error
+	}
+
+	// give every player a hand of cards
+	for _, player := range game.Players {
+		player.Hand = game.Deck.White[:10]
+		game.Deck.White = game.Deck.White[10:]
+		player.UpdateHand()
+	}
+
+	// assign random player card czar
+	game.Players[rand.Intn(len(game.Players))].Czar = true
+
+	game.UpdatePlayers()
+
 	game.Started = true
 	game.UpdateGameState(nil)
+}
+
+// Player represents a player.
+type Player struct {
+	WS       *websocket.Conn
+	Username string
+	Czar     bool
+	Hand     []string
+}
+
+// UpdateHand sends the hand that the player has.
+func (player Player) UpdateHand() {
+	fmt.Println(player.Hand == nil)
+	player.WS.WriteJSON(map[string]interface{}{
+		"id":   "hand",
+		"hand": player.Hand,
+	})
 }
 
 var upgrader websocket.Upgrader
@@ -112,6 +156,7 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 		player = &Player{
 			Username: username,
 			WS:       ws,
+			Hand:     make([]string, 0),
 		}
 		game.Players = append(game.Players, player)
 	}
@@ -124,6 +169,7 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 
 	game.UpdatePlayers()
 	game.UpdateGameState(player)
+	player.UpdateHand()
 
 	for {
 		var res map[string]string

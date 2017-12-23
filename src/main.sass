@@ -3,3 +3,34 @@
 
 html
 	font-family: Roboto
+
+.card-wrapper
+	align-items: center
+	display: inline-flex
+	font-family: Helvetica
+	font-size: 1.25em
+	height: 220px
+	justify-content: center
+	vertical-align: top
+	white-space: normal
+	width: 220px
+
+.card
+	border-radius: 10px
+	border: 1px solid black
+	box-sizing: border-box
+	cursor: pointer
+	height: 200px
+	padding: 10px
+	transition: 200ms
+	width: 200px
+
+	&.selected
+		background: #a5d6a7
+		height: 210px
+		width: 210px
+
+@media screen and (orientation: landscape)
+	.card:hover
+		height: 210px
+		width: 210px

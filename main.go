@@ -3,11 +3,12 @@ package main
 import (
 	"html/template"
 	"log"
+	"math/rand"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/websocket"
 	"github.com/reujab/httplogger"
 )
 
@@ -22,16 +23,11 @@ type Deck struct {
 	White []string
 }
 
-// Player represents a player.
-type Player struct {
-	WS       *websocket.Conn
-	Username string
-	Czar     bool
-}
-
 var templates = template.Must(template.ParseGlob("src/*.tmpl"))
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	router := mux.NewRouter()
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("dist"))))
 	router.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
