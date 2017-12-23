@@ -3,6 +3,7 @@ import "./main.sass"
 import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 
+import UsernamePicker from "./UsernamePicker"
 import Header from "./Header"
 import Settings from "./Settings"
 
@@ -15,18 +16,19 @@ class Index extends React.Component {
 		}
 	}
 
-	resetUsername() {
-		delete localStorage.username
+	setUsername(username) {
+		localStorage.username = username
 		this.setState({
-			username: "",
+			username,
 		})
 	}
 
 	render() {
 		return (
 			<Fragment>
-				<Header username={this.state.username} onUsernameChange={this.resetUsername.bind(this)} />
-				<Settings />
+				<UsernamePicker username={this.state.username} onChange={this.setUsername.bind(this)} />
+				<Header username={this.state.username} onUsernameChange={() => this.setUsername("")} />
+				<Settings username={this.state.username} />
 			</Fragment>
 		)
 	}

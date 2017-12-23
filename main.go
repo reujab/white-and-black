@@ -16,6 +16,7 @@ type Game struct {
 	ScoreLimit uint
 	Deck       Deck
 	Players    []*Player
+	Owner      string
 }
 
 var games []Game

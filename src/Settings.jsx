@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import React from "react"
 
 import {
@@ -35,6 +36,7 @@ class Settings extends React.Component {
 				scoreLimit: this.state.scoreLimit,
 				blankCards: this.state.blankCards,
 				decks: this.state.decks,
+				owner: this.props.username,
 			})
 		location.href = `/${res.text}`
 	}
@@ -123,6 +125,10 @@ class Settings extends React.Component {
 			</Grid>
 		)
 	}
+}
+
+Settings.propTypes = {
+	username: PropTypes.string.isRequired,
 }
 
 export default Settings

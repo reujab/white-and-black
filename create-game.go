@@ -16,6 +16,7 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 		ScoreLimit uint
 		BlankCards uint
 		Decks      []string
+		Owner      string
 	}
 	err := json.NewDecoder(req.Body).Decode(&settings)
 	if err != nil || settings.ScoreLimit < 1 {
@@ -26,6 +27,7 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 	game := Game{
 		ID:         xid.New().String(),
 		ScoreLimit: settings.ScoreLimit,
+		Owner:      settings.Owner,
 	}
 	for _, name := range settings.Decks {
 		if !deckRegex.MatchString(name) {
