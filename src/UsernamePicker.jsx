@@ -23,11 +23,6 @@ class UsernamePicker extends React.Component {
 			return
 		}
 
-		if (username.length > 16) {
-			this.props.onError("Username too long")
-			return
-		}
-
 		this.props.onChange(username)
 	}
 
@@ -53,6 +48,7 @@ class UsernamePicker extends React.Component {
 								fullWidth
 								label="Username"
 								value={this.state.input}
+								InputProps={{inputProps: {maxLength: 16}}}
 								onChange={(e) => this.setState({
 									input: e.target.value,
 								})}
