@@ -11,54 +11,6 @@ import (
 	"github.com/reujab/httplogger"
 )
 
-// Game represents a game.
-type Game struct {
-	Started    bool
-	ScoreLimit uint
-	Deck       Deck
-	Players    []*Player
-	Owner      string
-}
-
-// UpdatePlayers sends an updated list of players to every connected websocket.
-func (game *Game) UpdatePlayers() {
-	var players []map[string]interface{}
-	for _, player := range game.Players {
-		players = append(players, map[string]interface{}{
-			"username": player.Username,
-			"online":   player.WS != nil,
-			"czar":     player.Czar,
-			"owner":    game.Owner == player.Username,
-		})
-	}
-	for _, player := range game.Players {
-		if player.WS != nil {
-			player.WS.WriteJSON(map[string]interface{}{
-				"id":      "players",
-				"players": players,
-			})
-		}
-	}
-}
-
-// UpdateGameState sends an updated game state to every connected websocket.
-func (game *Game) UpdateGameState(player *Player) {
-	state := map[string]interface{}{
-		"id":      "game state",
-		"started": game.Started,
-	}
-
-	if player == nil {
-		for _, player := range game.Players {
-			if player.WS != nil {
-				player.WS.WriteJSON(state)
-			}
-		}
-	} else {
-		player.WS.WriteJSON(state)
-	}
-}
-
 var (
 	games      = make(map[string]*Game)
 	gamesMutex sync.RWMutex

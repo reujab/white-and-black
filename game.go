@@ -5,6 +5,70 @@ import (
 	"github.com/k0kubun/pp"
 )
 
+// Game represents a game.
+type Game struct {
+	Started    bool
+	ScoreLimit uint
+	Deck       Deck
+	Players    []*Player
+	Owner      string
+}
+
+// UpdatePlayers sends an updated list of players to every connected websocket.
+func (game *Game) UpdatePlayers() {
+	var players []map[string]interface{}
+	for _, player := range game.Players {
+		players = append(players, map[string]interface{}{
+			"username": player.Username,
+			"online":   player.WS != nil,
+			"czar":     player.Czar,
+			"owner":    game.Owner == player.Username,
+		})
+	}
+	for _, player := range game.Players {
+		if player.WS != nil {
+			player.WS.WriteJSON(map[string]interface{}{
+				"id":      "players",
+				"players": players,
+			})
+		}
+	}
+}
+
+// UpdateGameState sends an updated game state to every connected websocket.
+func (game *Game) UpdateGameState(player *Player) {
+	state := map[string]interface{}{
+		"id":      "game state",
+		"started": game.Started,
+	}
+
+	if player == nil {
+		for _, player := range game.Players {
+			if player.WS != nil {
+				player.WS.WriteJSON(state)
+			}
+		}
+	} else {
+		player.WS.WriteJSON(state)
+	}
+}
+
+// Start starts the game.
+func (game *Game) Start() {
+	var online int
+	for _, player := range game.Players {
+		if player.WS != nil {
+			online++
+		}
+	}
+	if online < 3 {
+		return
+	}
+
+	game.Started = true
+	game.UpdateGameState(nil)
+}
+
 var upgrader websocket.Upgrader
 
 func handlePlayer(game *Game, ws *websocket.Conn) {
@@ -70,18 +134,7 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 
 		switch res["id"] {
 		case "start game":
-			var online int
-			for _, player := range game.Players {
-				if player.WS != nil {
-					online++
-				}
-			}
-			if online < 3 {
-				continue
-			}
-
-			game.Started = true
-			game.UpdateGameState(nil)
+			game.Start()
 		default:
 			pp.Println(res)
 		}
