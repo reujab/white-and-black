@@ -72,13 +72,7 @@ class Settings extends React.Component {
 		))
 
 		return (
-			<Grid
-				container
-				id="settings"
-				style={{
-					boxSizing: "border-box",
-				}}
-			>
+			<Grid container id="settings">
 				<Grid item xs={12}>
 					<Typography type="headline">General</Typography>
 				</Grid>
