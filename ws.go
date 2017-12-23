@@ -50,5 +50,9 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 
 	game.UpdatePlayers()
 
-	ws.ReadMessage()
+	for {
+		if _, _, err := ws.ReadMessage(); err != nil {
+			break
+		}
+	}
 }

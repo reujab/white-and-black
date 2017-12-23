@@ -27,6 +27,7 @@ func (game *Game) UpdatePlayers() {
 			"username": player.Username,
 			"online":   player.WS != nil,
 			"czar":     player.Czar,
+			"owner":    game.Owner == player.Username,
 		})
 	}
 	for _, player := range game.Players {

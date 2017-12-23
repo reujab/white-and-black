@@ -3,18 +3,9 @@ import "./main.sass"
 import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 
-import Header from "./Header"
 import UsernamePicker from "./UsernamePicker"
-import {
-	Grid,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Tooltip,
-} from "material-ui"
-import Star from "material-ui-icons/Star"
-import Warning from "material-ui-icons/Warning"
+import Header from "./Header"
+import PlayerList from "./PlayerList"
 
 class Game extends React.Component {
 	constructor(props) {
@@ -40,11 +31,11 @@ class Game extends React.Component {
 			usernameError: "",
 		})
 
-		const ws = new WebSocket(`ws://${location.host + location.pathname}/ws`)
-		ws.onopen = () => {
-			ws.send(username)
+		this.ws = new WebSocket(`ws://${location.host + location.pathname}/ws`)
+		this.ws.onopen = () => {
+			this.ws.send(username)
 		}
-		ws.onmessage = (e) => {
+		this.ws.onmessage = (e) => {
 			const res = JSON.parse(e.data)
 			switch (res.id) {
 			case "error":
@@ -68,31 +59,6 @@ class Game extends React.Component {
 	}
 
 	render() {
-		const players = this.state.players.map((player) => (
-			<ListItem key={player.username} button>
-				{player.czar ? (
-					<Tooltip title="Card Czar">
-						<ListItemIcon>
-							<Star />
-						</ListItemIcon>
-					</Tooltip>
-				) : !player.online ? ( // eslint-disable-line
-					<Tooltip title="Offline">
-						<ListItemIcon>
-							<Warning />
-						</ListItemIcon>
-					</Tooltip>
-				) : null}
-				<ListItemText
-					inset
-					primary={player.username}
-					style={{
-						overflow: "hidden",
-					}}
-				/>
-			</ListItem>
-		))
-
 		return (
 			<Fragment>
 				<UsernamePicker
@@ -101,24 +67,11 @@ class Game extends React.Component {
 					onChange={this.setUsername.bind(this)}
 				/>
 				<Header username={this.state.username} />
-				<Grid
-					container
-					style={{
-						margin: 0,
-						width: "100%",
-					}}
-				>
-					<Grid
-						item
-						xs={12}
-						md={3}
-						lg={2}
-					>
-						<List>
-							{players}
-						</List>
-					</Grid>
-				</Grid>
+				<PlayerList
+					username={this.state.username}
+					players={this.state.players}
+					onStart={() => this.ws.send({id: "start game"})}
+				/>
 			</Fragment>
 		)
 	}
