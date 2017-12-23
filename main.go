@@ -19,6 +19,26 @@ type Game struct {
 	Owner      string
 }
 
+// UpdatePlayers sends an updated list of players to every connected websocket.
+func (game *Game) UpdatePlayers() {
+	var players []map[string]interface{}
+	for _, player := range game.Players {
+		players = append(players, map[string]interface{}{
+			"username": player.Username,
+			"online":   player.WS != nil,
+			"czar":     player.Czar,
+		})
+	}
+	for _, player := range game.Players {
+		if player.WS != nil {
+			player.WS.WriteJSON(map[string]interface{}{
+				"id":      "players",
+				"players": players,
+			})
+		}
+	}
+}
+
 var games []Game
 
 // Deck represents a deck.
@@ -29,8 +49,9 @@ type Deck struct {
 
 // Player represents a player.
 type Player struct {
-	Username string
 	WS       *websocket.Conn
+	Username string
+	Czar     bool
 }
 
 var templates = template.Must(template.ParseGlob("src/*.tmpl"))

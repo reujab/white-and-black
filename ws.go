@@ -24,7 +24,10 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 			if player.WS == nil {
 				player.WS = ws
 			} else {
-				ws.WriteMessage(1, []byte("err:taken"))
+				ws.WriteJSON(map[string]string{
+					"id":  "error",
+					"err": "username taken",
+				})
 				return
 			}
 		}
@@ -40,8 +43,12 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 	}
 
 	// once the socket closes, don't remove the player, just the websocket
-	defer func() { player.WS = nil }()
+	defer func() {
+		player.WS = nil
+		game.UpdatePlayers()
+	}()
 
-	// keep goroutine open until the client closes the socket
-	ws.NextReader()
+	game.UpdatePlayers()
+
+	ws.ReadMessage()
 }
