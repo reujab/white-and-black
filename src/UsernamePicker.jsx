@@ -54,7 +54,9 @@ class UsernamePicker extends React.Component {
 					<Grid
 						container
 						style={{
+							margin: 0,
 							padding: 20,
+							width: "100%",
 						}}
 					>
 						<Grid

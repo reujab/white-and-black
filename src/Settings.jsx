@@ -72,7 +72,14 @@ class Settings extends React.Component {
 		))
 
 		return (
-			<Grid container id="settings">
+			<Grid
+				container
+				style={{
+					margin: "auto",
+					maxWidth: 750,
+					width: "100%",
+				}}
+			>
 				<Grid item xs={12}>
 					<Typography type="headline">General</Typography>
 				</Grid>
