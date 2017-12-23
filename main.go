@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"sync"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
@@ -12,7 +13,6 @@ import (
 
 // Game represents a game.
 type Game struct {
-	ID         string
 	ScoreLimit uint
 	Deck       Deck
 	Players    []*Player
@@ -39,7 +39,10 @@ func (game *Game) UpdatePlayers() {
 	}
 }
 
-var games []Game
+var (
+	games      = make(map[string]*Game)
+	gamesMutex sync.RWMutex
+)
 
 // Deck represents a deck.
 type Deck struct {
@@ -95,10 +98,7 @@ func die(err error) {
 }
 
 func getGame(id string) *Game {
-	for i, game := range games {
-		if game.ID == id {
-			return &games[i]
-		}
-	}
-	return nil
+	gamesMutex.RLock()
+	defer gamesMutex.RUnlock()
+	return games[id]
 }

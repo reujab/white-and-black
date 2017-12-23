@@ -24,8 +24,7 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	game := Game{
-		ID:         xid.New().String(),
+	game := &Game{
 		ScoreLimit: settings.ScoreLimit,
 		Owner:      settings.Owner,
 	}
@@ -57,6 +56,9 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	games = append(games, game)
-	res.Write([]byte(game.ID))
+	id := xid.New().String()
+	gamesMutex.Lock()
+	games[id] = game
+	gamesMutex.Unlock()
+	res.Write([]byte(id))
 }
