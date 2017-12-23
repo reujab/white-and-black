@@ -1,13 +1,10 @@
 import PropTypes from "prop-types"
 import React, {Fragment} from "react"
 
-import {
-	Button,
-	Dialog,
-	DialogTitle,
-	Grid,
-	TextField,
-} from "material-ui"
+import Dialog, {DialogTitle} from "material-ui/Dialog"
+import Grid from "material-ui/Grid"
+import TextField from "material-ui/TextField"
+import Button from "material-ui/Button"
 
 class UsernamePicker extends React.Component {
 	constructor(props) {

@@ -1,20 +1,17 @@
+import deckMetadata from "./cards/metadata"
+import superagent from "superagent"
+
 import PropTypes from "prop-types"
 import React from "react"
 
-import {
-	Button,
-	Checkbox,
-	Grid,
-	TextField,
-	Tooltip,
-	Typography,
-	FormGroup,
-	FormControlLabel,
-} from "material-ui"
+import Grid from "material-ui/Grid"
+import Typography from "material-ui/Typography"
+import TextField from "material-ui/TextField"
+import {FormGroup, FormControlLabel} from "material-ui/Form"
+import Tooltip from "material-ui/Tooltip"
+import Checkbox from "material-ui/Checkbox"
 import MiniCard from "./MiniCard"
-
-import deckMetadata from "./cards/metadata"
-import superagent from "superagent"
+import Button from "material-ui/Button"
 
 class Settings extends React.Component {
 	constructor(props) {

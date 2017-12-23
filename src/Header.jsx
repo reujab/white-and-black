@@ -1,12 +1,10 @@
 import PropTypes from "prop-types"
 import React from "react"
 
-import {
-	AppBar,
-	IconButton,
-	Toolbar,
-	Typography,
-} from "material-ui"
+import AppBar from "material-ui/AppBar"
+import Toolbar from "material-ui/Toolbar"
+import IconButton from "material-ui/IconButton"
+import Typography from "material-ui/Typography"
 
 class Header extends React.Component {
 	render() {

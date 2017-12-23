@@ -3,7 +3,7 @@ import "./main.sass"
 import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 
-import {Snackbar} from "material-ui"
+import Snackbar from "material-ui/Snackbar"
 import UsernamePicker from "./UsernamePicker"
 import Header from "./Header"
 import PlayerList from "./PlayerList"

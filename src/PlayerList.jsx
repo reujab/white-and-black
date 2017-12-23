@@ -1,17 +1,12 @@
 import PropTypes from "prop-types"
 import React from "react"
 
-import {
-	Button,
-	Grid,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Tooltip,
-} from "material-ui"
+import Grid from "material-ui/Grid"
+import List, {ListItem, ListItemIcon, ListItemText} from "material-ui/List"
+import Tooltip from "material-ui/Tooltip"
 import Star from "material-ui-icons/Star"
 import Warning from "material-ui-icons/Warning"
+import Button from "material-ui/Button"
 
 class PlayerList extends React.Component {
 	render() {
