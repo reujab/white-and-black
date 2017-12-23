@@ -35,7 +35,7 @@ func (game *Game) UpdatePlayers() {
 	}
 }
 
-// UpdateGameState sends an updated game state to every connected websocket.
+// UpdateGameState sends an updated game state to the specified player.
 func (game *Game) UpdateGameState(player *Player) {
 	state := map[string]interface{}{
 		"id":      "game state",
