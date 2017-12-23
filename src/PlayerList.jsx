@@ -70,7 +70,7 @@ class PlayerList extends React.Component {
 				>
 					<List>
 						{players}
-						{owner && (
+						{owner && !this.props.started && (
 							<Button
 								raised
 								disabled={online < 3}
@@ -98,6 +98,7 @@ PlayerList.propTypes = {
 		czar: PropTypes.bool.isRequired,
 		owner: PropTypes.bool.isRequired,
 	})).isRequired,
+	started: PropTypes.bool.isRequired,
 	username: PropTypes.string.isRequired,
 }
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/websocket"
+	"github.com/k0kubun/pp"
 )
 
 var upgrader websocket.Upgrader
@@ -35,6 +36,15 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 
 	// if a player with that username doesn't yet exist, create it
 	if player == nil {
+		// unless the game has started
+		if game.Started {
+			ws.WriteJSON(map[string]string{
+				"id":  "error",
+				"err": "game started",
+			})
+			return
+		}
+
 		player = &Player{
 			Username: username,
 			WS:       ws,
@@ -49,10 +59,31 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 	}()
 
 	game.UpdatePlayers()
+	game.UpdateGameState(player)
 
 	for {
-		if _, _, err := ws.ReadMessage(); err != nil {
+		var res map[string]string
+		err := ws.ReadJSON(&res)
+		if err != nil {
 			break
+		}
+
+		switch res["id"] {
+		case "start game":
+			var online int
+			for _, player := range game.Players {
+				if player.WS != nil {
+					online++
+				}
+			}
+			if online < 3 {
+				continue
+			}
+
+			game.Started = true
+			game.UpdateGameState(nil)
+		default:
+			pp.Println(res)
 		}
 	}
 }

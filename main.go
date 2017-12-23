@@ -13,6 +13,7 @@ import (
 
 // Game represents a game.
 type Game struct {
+	Started    bool
 	ScoreLimit uint
 	Deck       Deck
 	Players    []*Player
@@ -37,6 +38,24 @@ func (game *Game) UpdatePlayers() {
 				"players": players,
 			})
 		}
+	}
+}
+
+// UpdateGameState sends an updated game state to every connected websocket.
+func (game *Game) UpdateGameState(player *Player) {
+	state := map[string]interface{}{
+		"id":      "game state",
+		"started": game.Started,
+	}
+
+	if player == nil {
+		for _, player := range game.Players {
+			if player.WS != nil {
+				player.WS.WriteJSON(state)
+			}
+		}
+	} else {
+		player.WS.WriteJSON(state)
 	}
 }
 

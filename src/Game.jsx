@@ -14,6 +14,7 @@ class Game extends React.Component {
 		this.state = {
 			username: localStorage.username || "",
 			usernameError: "",
+			started: true, // assume game has started until told otherwise
 			players: [],
 		}
 	}
@@ -39,23 +40,40 @@ class Game extends React.Component {
 			const res = JSON.parse(e.data)
 			switch (res.id) {
 			case "error":
-				if (res.err === "username taken") {
+				switch (res.err) {
+				case "username taken":
 					this.setState({
 						username: "",
 						usernameError: "Username taken",
 					})
+					break
+				case "game started":
+					this.setState({
+						usernameError: "Game has already started", // FIXME: don't use usernameError
+					})
+					break
+				default:
+					console.error("unknown err", res.err)
 				}
 				break
+			case "game state":
+				this.setState({
+					started: res.started,
+				})
+				break
 			case "players":
-				console.log(res.players)
 				this.setState({
 					players: res.players,
 				})
 				break
 			default:
-				console.error("Unknown message", res)
+				console.error("unknown msg", res)
 			}
 		}
+	}
+
+	send(msg) {
+		this.ws.send(JSON.stringify(msg))
 	}
 
 	render() {
@@ -70,7 +88,8 @@ class Game extends React.Component {
 				<PlayerList
 					username={this.state.username}
 					players={this.state.players}
-					onStart={() => this.ws.send({id: "start game"})}
+					started={this.state.started}
+					onStart={() => this.send({id: "start game"})}
 				/>
 			</Fragment>
 		)
