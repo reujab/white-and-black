@@ -8,6 +8,7 @@ import UsernamePicker from "./UsernamePicker"
 import Header from "./Header"
 import Grid from "material-ui/Grid"
 import PlayerList from "./PlayerList"
+import BlackCard from "./BlackCard"
 import Hand from "./Hand"
 
 class Game extends React.Component {
@@ -20,7 +21,7 @@ class Game extends React.Component {
 			started: true, // assume game has started until told otherwise
 			players: [],
 			hand: [],
-			selectedCard: null,
+			blackCard: null,
 		}
 	}
 
@@ -64,6 +65,7 @@ class Game extends React.Component {
 			case "game state":
 				this.setState({
 					started: res.started,
+					blackCard: res.blackCard,
 				})
 				break
 			case "players":
@@ -123,7 +125,8 @@ class Game extends React.Component {
 						lg={12 - 2}
 						style={"orientation" in window ? {padding: 0} : {}}
 					>
-						<Hand selectedCard={this.state.selectedCard} onSelect={(selectedCard) => this.setState({selectedCard})}>{this.state.hand}</Hand>
+						<BlackCard>{this.state.blackCard}</BlackCard>
+						<Hand onSelect={(selectedCard) => console.log(selectedCard)}>{this.state.hand}</Hand>
 					</Grid>
 				</Grid>
 			</Fragment>

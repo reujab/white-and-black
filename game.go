@@ -15,6 +15,7 @@ type Game struct {
 	Deck       Deck
 	Players    []*Player
 	Owner      string
+	BlackCard  string
 }
 
 // UpdatePlayers sends an updated list of players to every connected websocket.
@@ -41,8 +42,9 @@ func (game *Game) UpdatePlayers() {
 // UpdateGameState sends an updated game state to the specified player.
 func (game *Game) UpdateGameState(player *Player) {
 	state := map[string]interface{}{
-		"id":      "game state",
-		"started": game.Started,
+		"id":        "game state",
+		"started":   game.Started,
+		"blackCard": game.BlackCard,
 	}
 
 	if player == nil {
@@ -80,6 +82,10 @@ func (game *Game) Start() {
 		panic("not enough cards") // FIXME: properly handle error
 	}
 
+	// set black card
+	game.BlackCard = game.Deck.Black[0]
+	game.Deck.Black = game.Deck.Black[1:]
+
 	// give every player a hand of cards
 	for _, player := range game.Players {
 		player.Hand = game.Deck.White[:10]
@@ -90,9 +96,8 @@ func (game *Game) Start() {
 	// assign random player card czar
 	game.Players[rand.Intn(len(game.Players))].Czar = true
 
-	game.UpdatePlayers()
-
 	game.Started = true
+	game.UpdatePlayers()
 	game.UpdateGameState(nil)
 }
 

@@ -2,6 +2,14 @@ import PropTypes from "prop-types"
 import React from "react"
 
 class Hand extends React.Component {
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			selected: null,
+		}
+	}
+
 	render() {
 		return (
 			<div
@@ -15,9 +23,9 @@ class Hand extends React.Component {
 				{this.props.children.map((card) => (
 					<div key={card} className="card-wrapper">
 						<div
-							className={`card ${this.props.selectedCard === card ? "selected" : ""}`}
+							className={`card white ${this.state.selected === card ? "selected" : ""}`}
 							dangerouslySetInnerHTML={{__html: card}}
-							onClick={() => this.props.onSelect(card)}
+							onClick={() => this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: card})}
 						/>
 					</div>
 				))}
@@ -29,7 +37,6 @@ class Hand extends React.Component {
 Hand.propTypes = {
 	children: PropTypes.arrayOf(PropTypes.string).isRequired,
 	onSelect: PropTypes.func.isRequired,
-	selectedCard: PropTypes.string,
 }
 
 export default Hand
