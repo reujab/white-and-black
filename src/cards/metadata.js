@@ -1,4 +1,4 @@
-[
+export default [
 	["base", "Base", 90, 460],
 	["red", "Red Box", 70, 230],
 	["blue", "Blue Box", 80, 220],
@@ -46,5 +46,5 @@
 	["tgwtg", "That Guy With The Glasses", 208, 425],
 	["very serious", "Very Serious", 59, 113],
 	["vidya", "Vidya", 107, 215],
-	["xkcd", "xkcd", 67, 41]
+	["xkcd", "xkcd", 67, 41],
 ]

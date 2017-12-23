@@ -13,7 +13,7 @@ import {
 } from "material-ui"
 import MiniCard from "./MiniCard"
 
-import deckMetadata from "./deck-metadata"
+import deckMetadata from "./cards/metadata"
 import superagent from "superagent"
 
 class Settings extends React.Component {
