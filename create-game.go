@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"math/rand"
 	"net/http"
 	"os"
 	"regexp"
@@ -54,6 +55,16 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 	if len(game.Deck.Black) == 0 || len(game.Deck.White) == 0 {
 		http.Error(res, "Bad Request", 400)
 		return
+	}
+
+	// shuffle decks
+	for i := range game.Deck.Black {
+		j := rand.Intn(i + 1)
+		game.Deck.Black[i], game.Deck.Black[j] = game.Deck.Black[j], game.Deck.Black[i]
+	}
+	for i := range game.Deck.White {
+		j := rand.Intn(i + 1)
+		game.Deck.White[i], game.Deck.White[j] = game.Deck.White[j], game.Deck.White[i]
 	}
 
 	id := xid.New().String()
