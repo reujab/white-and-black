@@ -15,20 +15,20 @@ class Index extends React.Component {
 		}
 	}
 
-	render() {
-		return (
-			<Fragment>
-				<Header username={this.state.username} onUsernameChange={this.resetUsername.bind(this)}/>
-				<Settings />
-			</Fragment>
-		)
-	}
-
 	resetUsername() {
 		delete localStorage.username
 		this.setState({
 			username: "",
 		})
+	}
+
+	render() {
+		return (
+			<Fragment>
+				<Header username={this.state.username} onUsernameChange={this.resetUsername.bind(this)} />
+				<Settings />
+			</Fragment>
+		)
 	}
 }
 

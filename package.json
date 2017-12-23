@@ -25,6 +25,7 @@
     "webpack": "^3.10.0"
   },
   "scripts": {
+    "lint": "eslint src/*.jsx",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack -w"

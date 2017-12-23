@@ -11,28 +11,48 @@ import {
 class Header extends React.Component {
 	render() {
 		return (
-			<AppBar position="static" style={{
-				marginBottom: 10,
-			}}>
+			<AppBar
+				position="static"
+				style={{
+					marginBottom: 10,
+				}}
+			>
 				<Toolbar>
-					<IconButton disabled={true} style={{
-						borderRadius: 0,
-						marginRight: 10,
-					}}>
-						<img src="/static/favicon.png" style={{
-							width: "100%",
-						}} />
+					<IconButton
+						disabled
+						style={{
+							borderRadius: 0,
+							marginRight: 10,
+						}}
+					>
+						<img
+							src="/static/favicon.png"
+							style={{
+								width: "100%",
+							}}
+						/>
 					</IconButton>
-					<Typography type="title" color="inherit" style={{
-						flexGrow: 1,
-						marginRight: 10,
-						whiteSpace: "nowrap",
-					}}>White & Black</Typography>
-					<span onClick={this.props.onUsernameChange} style={{
-						cursor: this.props.onUsernameChange ? "pointer" : "default",
-						overflow: "hidden",
-						textOverflow: "ellipsis",
-					}}>{this.props.username}</span>
+					<Typography
+						type="title"
+						color="inherit"
+						style={{
+							flexGrow: 1,
+							marginRight: 10,
+							whiteSpace: "nowrap",
+						}}
+					>
+						White & Black
+					</Typography>
+					<span
+						onClick={this.props.onUsernameChange}
+						style={{
+							cursor: this.props.onUsernameChange ? "pointer" : "default",
+							overflow: "hidden",
+							textOverflow: "ellipsis",
+						}}
+					>
+						{this.props.username}
+					</span>
 				</Toolbar>
 			</AppBar>
 		)
@@ -40,8 +60,8 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-	username: PropTypes.string.isRequired,
 	onUsernameChange: PropTypes.func,
+	username: PropTypes.string.isRequired,
 }
 
 export default Header

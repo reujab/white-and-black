@@ -4,20 +4,24 @@ import React from "react"
 class MiniCard extends React.Component {
 	render() {
 		return (
-			<div style={{
-				display: "inline-flex",
-				alignItems: "center",
-				marginRight: 25,
-			}}>
-				<div style={{
-					width: 20,
-					height: 30,
-					display: "inline-block",
-					borderRadius: 3,
-					background: this.props.color,
-					border: "1px solid black",
-					marginRight: 5,
-				}} />
+			<div
+				style={{
+					display: "inline-flex",
+					alignItems: "center",
+					marginRight: 25,
+				}}
+			>
+				<div
+					style={{
+						width: 20,
+						height: 30,
+						display: "inline-block",
+						borderRadius: 3,
+						background: this.props.color,
+						border: "1px solid black",
+						marginRight: 5,
+					}}
+				/>
 				{this.props.children}
 			</div>
 		)
@@ -25,8 +29,8 @@ class MiniCard extends React.Component {
 }
 
 MiniCard.propTypes = {
-	color: PropTypes.string.isRequired,
 	children: PropTypes.number.isRequired,
+	color: PropTypes.string.isRequired,
 }
 
 export default MiniCard

@@ -22,15 +22,6 @@ class Game extends React.Component {
 		}
 	}
 
-	render() {
-		return (
-			<Fragment>
-				<UsernamePicker error={this.state.usernameError} username={this.state.username} onChange={this.setUsername.bind(this)} />
-				<Header username={this.state.username} />
-			</Fragment>
-		)
-	}
-
 	setUsername(username) {
 		localStorage.username = username
 		this.setState({
@@ -54,6 +45,19 @@ class Game extends React.Component {
 				console.error("Unknown message", e)
 			}
 		}
+	}
+
+	render() {
+		return (
+			<Fragment>
+				<UsernamePicker
+					error={this.state.usernameError}
+					username={this.state.username}
+					onChange={this.setUsername.bind(this)}
+				/>
+				<Header username={this.state.username} />
+			</Fragment>
+		)
 	}
 }
 

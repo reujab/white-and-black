@@ -32,39 +32,79 @@ class Settings extends React.Component {
 		})
 	}
 
+	async submit() {
+		const res = await superagent.
+			post("/create-game").
+			send({
+				scoreLimit: this.state.scoreLimit,
+				blankCards: this.state.blankCards,
+				decks: this.state.decks,
+			})
+		location.href = `/${res.text}`
+	}
+
 	render() {
-		const decks = deckMetadata.map((deck) => <Tooltip key={deck[0]} title={`${deck[2]} Black Cards, ${deck[3]} White Cards`}>
-			<FormControlLabel label={deck[1]} control={
-				<Checkbox onChange={(e) => {
-					if (e.target.checked) {
-						this.setState({
-							blackCards: this.state.blackCards + deck[2],
-							whiteCards: this.state.whiteCards + deck[3],
-						})
-						this.state.decks.push(deck[0])
-					} else {
-						this.setState({
-							blackCards: this.state.blackCards - deck[2],
-							whiteCards: this.state.whiteCards - deck[3],
-						})
-						this.state.decks.splice(this.state.decks.indexOf(deck[0]), 1)
+		const decks = deckMetadata.map((deck) => (
+			<Tooltip key={deck[0]} title={`${deck[2]} Black Cards, ${deck[3]} White Cards`}>
+				<FormControlLabel
+					label={deck[1]}
+					control={
+						<Checkbox
+							onChange={(e) => {
+								if (e.target.checked) {
+									this.setState((state) => ({
+										blackCards: state.blackCards + deck[2],
+										whiteCards: state.whiteCards + deck[3],
+									}))
+									this.state.decks.push(deck[0])
+								} else {
+									this.setState((state) => ({
+										blackCards: state.blackCards - deck[2],
+										whiteCards: state.whiteCards - deck[3],
+									}))
+									this.state.decks.splice(this.state.decks.indexOf(deck[0]), 1)
+								}
+							}}
+						/>
 					}
-				}} />
-			} />
-		</Tooltip>)
+				/>
+			</Tooltip>
+		))
 
 		return (
-			<Grid container id="settings" style={{
-				boxSizing: "border-box",
-			}}>
+			<Grid
+				container
+				id="settings"
+				style={{
+					boxSizing: "border-box",
+				}}
+			>
 				<Grid item xs={12}>
 					<Typography type="headline">General</Typography>
 				</Grid>
-				<Grid item xs={12} sm={6}>
-					<TextField label="Score Limit" value={this.state.scoreLimit} onChange={this.handleChange("scoreLimit")} fullWidth />
+				<Grid
+					item
+					xs={12}
+					sm={6}
+				>
+					<TextField
+						label="Score Limit"
+						value={this.state.scoreLimit}
+						onChange={this.handleChange("scoreLimit")}
+						fullWidth
+					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
-					<TextField label="Blank Cards" value={this.state.blankCards} onChange={this.handleChange("blankCards")} fullWidth />
+				<Grid
+					item
+					xs={12}
+					sm={6}
+				>
+					<TextField
+						label="Blank Cards"
+						value={this.state.blankCards}
+						onChange={this.handleChange("blankCards")}
+						fullWidth
+					/>
 				</Grid>
 
 				<Grid item xs={12}>
@@ -85,17 +125,6 @@ class Settings extends React.Component {
 				</Grid>
 			</Grid>
 		)
-	}
-
-	async submit() {
-		const res = await superagent.
-			post("/create-game").
-			send({
-				scoreLimit: this.state.scoreLimit,
-				blankCards: this.state.blankCards,
-				decks: this.state.decks,
-			})
-		location.href = `/${res.text}`
 	}
 }
 
