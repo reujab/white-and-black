@@ -3,6 +3,7 @@ import "./main.sass"
 import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 
+import {Snackbar} from "material-ui"
 import UsernamePicker from "./UsernamePicker"
 import Header from "./Header"
 import PlayerList from "./PlayerList"
@@ -12,8 +13,8 @@ class Game extends React.Component {
 		super(props)
 
 		this.state = {
+			error: "",
 			username: localStorage.username || "",
-			usernameError: "",
 			started: true, // assume game has started until told otherwise
 			players: [],
 		}
@@ -28,8 +29,8 @@ class Game extends React.Component {
 	setUsername(username) {
 		localStorage.username = username
 		this.setState({
+			error: "",
 			username,
-			usernameError: "",
 		})
 
 		this.ws = new WebSocket(`ws://${location.host + location.pathname}/ws`)
@@ -44,12 +45,12 @@ class Game extends React.Component {
 				case "username taken":
 					this.setState({
 						username: "",
-						usernameError: "Username taken",
+						error: "Username taken",
 					})
 					break
 				case "game started":
 					this.setState({
-						usernameError: "Game has already started", // FIXME: don't use usernameError
+						error: "Game has already started",
 					})
 					break
 				default:
@@ -79,10 +80,11 @@ class Game extends React.Component {
 	render() {
 		return (
 			<Fragment>
+				<Snackbar open={!!this.state.error} message={this.state.error} />
 				<UsernamePicker
-					error={this.state.usernameError}
 					username={this.state.username}
 					onChange={this.setUsername.bind(this)}
+					onError={(error) => this.setState({error})}
 				/>
 				<Header username={this.state.username} />
 				<PlayerList

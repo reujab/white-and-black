@@ -6,7 +6,6 @@ import {
 	Dialog,
 	DialogTitle,
 	Grid,
-	Snackbar,
 	TextField,
 } from "material-ui"
 
@@ -15,25 +14,20 @@ class UsernamePicker extends React.Component {
 		super(props)
 
 		this.state = {
-			usernameInput: "",
-			error: "",
+			input: "",
 		}
 	}
 
 	setUsername() {
-		const username = this.state.usernameInput
+		const username = this.state.input
 
 		if (username.length < 3) {
-			this.setState({
-				error: "Username too short",
-			})
+			this.props.onError("Username too short")
 			return
 		}
 
 		if (username.length > 16) {
-			this.setState({
-				error: "Username too long",
-			})
+			this.props.onError("Username too long")
 			return
 		}
 
@@ -61,9 +55,9 @@ class UsernamePicker extends React.Component {
 							<TextField
 								fullWidth
 								label="Username"
+								value={this.state.input}
 								onChange={(e) => this.setState({
-									error: "",
-									usernameInput: e.target.value,
+									input: e.target.value,
 								})}
 								onKeyDown={(e) => e.key === "Enter" && this.setUsername()}
 							/>
@@ -77,15 +71,14 @@ class UsernamePicker extends React.Component {
 						</Grid>
 					</Grid>
 				</Dialog>
-				<Snackbar open={!!(this.state.error || this.props.error)} message={this.state.error || this.props.error} />
 			</Fragment>
 		)
 	}
 }
 
 UsernamePicker.propTypes = {
-	error: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
+	onError: PropTypes.func.isRequired,
 	username: PropTypes.string.isRequired,
 }
 
