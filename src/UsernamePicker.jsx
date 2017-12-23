@@ -20,12 +20,6 @@ class UsernamePicker extends React.Component {
 		}
 	}
 
-	handleState(key) {
-		return (e) => this.setState({
-			[key]: e.target.value,
-		})
-	}
-
 	setUsername() {
 		const username = this.state.usernameInput
 

@@ -233,9 +233,7 @@ rules:
   nonblock-statement-body-position: error
   object-curly-newline:
     - error
-    - ObjectExpression:
-        minProperties: 1
-      ObjectPattern: never
+    - consistent: true
   object-curly-spacing: error
   object-property-newline: error
   one-var:

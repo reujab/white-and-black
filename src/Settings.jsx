@@ -26,10 +26,6 @@ class Settings extends React.Component {
 			blackCards: 0,
 			whiteCards: 0,
 		}
-
-		this.handleChange = (key) => (e) => this.setState({
-			[key]: e.target.value,
-		})
 	}
 
 	async submit() {
@@ -91,7 +87,7 @@ class Settings extends React.Component {
 					<TextField
 						label="Score Limit"
 						value={this.state.scoreLimit}
-						onChange={this.handleChange("scoreLimit")}
+						onChange={(scoreLimit) => this.setState({scoreLimit})}
 						fullWidth
 					/>
 				</Grid>
@@ -103,7 +99,7 @@ class Settings extends React.Component {
 					<TextField
 						label="Blank Cards"
 						value={this.state.blankCards}
-						onChange={this.handleChange("blankCards")}
+						onChange={(blankCards) => this.setState({blankCards})}
 						fullWidth
 					/>
 				</Grid>
