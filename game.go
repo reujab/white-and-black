@@ -103,7 +103,7 @@ type Player struct {
 
 // UpdateHand sends the hand that the player has.
 func (player Player) UpdateHand() {
-	player.WS.WriteJSON(map[string]interface{}{
+	player.WS.WriteJSON(map[string][]string{
 		"hand": player.Hand,
 	})
 }
