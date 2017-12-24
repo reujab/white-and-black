@@ -41,7 +41,7 @@ class UsernamePicker extends React.Component {
 								onChange={(e) => this.setState({
 									input: e.target.value,
 								})}
-								onKeyDown={(e) => e.key === "Enter" && this.setUsername()}
+								onKeyDown={(e) => e.key === "Enter" && this.props.onChange(this.state.input)}
 							/>
 						</Grid>
 						<Grid
