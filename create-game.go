@@ -14,8 +14,8 @@ var deckRegex = regexp.MustCompile(`^[a-z\d ]+$`)
 
 func createGame(res http.ResponseWriter, req *http.Request) {
 	var settings struct {
-		ScoreLimit uint
-		BlankCards uint
+		ScoreLimit byte
+		BlankCards byte
 		Decks      []string
 		Owner      string
 	}
@@ -49,7 +49,7 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 		game.Deck.Black = append(game.Deck.Black, deck.Black...)
 		game.Deck.White = append(game.Deck.White, deck.White...)
 	}
-	for i := uint(0); i < settings.BlankCards; i++ {
+	for i := byte(0); i < settings.BlankCards; i++ {
 		game.Deck.White = append(game.Deck.White, "_")
 	}
 	if len(game.Deck.Black) == 0 || len(game.Deck.White) == 0 {

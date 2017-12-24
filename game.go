@@ -10,7 +10,7 @@ import (
 // Game represents a game.
 type Game struct {
 	Started    bool
-	ScoreLimit uint
+	ScoreLimit byte
 	Deck       Deck
 	Players    []*Player
 	Owner      string
