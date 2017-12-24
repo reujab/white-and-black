@@ -18,20 +18,34 @@ class Settings extends React.Component {
 		super(props)
 
 		this.state = {
-			scoreLimit: 8,
-			blankCards: 30,
+			scoreLimit: "8",
+			blankCards: "30",
 			decks: [],
 			blackCards: 0,
 			whiteCards: 0,
 		}
 	}
 
+	isInputValid() {
+		const scoreLimit = parseInt(this.state.scoreLimit)
+		const blankCards = parseInt(this.state.blankCards)
+		return (
+			!isNaN(scoreLimit) &&
+			!isNaN(blankCards) &&
+			scoreLimit > 1 &&
+			scoreLimit <= 255 &&
+			blankCards >= 0 &&
+			blankCards <= 255 &&
+			this.state.decks.length !== 0
+		)
+	}
+
 	async submit() {
 		const res = await superagent.
 			post("/create-game").
 			send({
-				scoreLimit: this.state.scoreLimit,
-				blankCards: this.state.blankCards,
+				scoreLimit: parseInt(this.state.scoreLimit),
+				blankCards: parseInt(this.state.blankCards),
 				decks: this.state.decks,
 				owner: this.props.username,
 			})
@@ -86,7 +100,7 @@ class Settings extends React.Component {
 					<TextField
 						label="Score Limit"
 						value={this.state.scoreLimit}
-						onChange={(scoreLimit) => this.setState({scoreLimit})}
+						onChange={(e) => this.setState({scoreLimit: e.target.value})}
 						fullWidth
 					/>
 				</Grid>
@@ -98,7 +112,7 @@ class Settings extends React.Component {
 					<TextField
 						label="Blank Cards"
 						value={this.state.blankCards}
-						onChange={(blankCards) => this.setState({blankCards})}
+						onChange={(e) => this.setState({blankCards: e.target.value})}
 						fullWidth
 					/>
 				</Grid>
@@ -117,7 +131,13 @@ class Settings extends React.Component {
 				</Grid>
 
 				<Grid item xs={12}>
-					<Button raised onClick={this.submit.bind(this)}>Create Game</Button>
+					<Button
+						raised
+						disabled={!this.isInputValid()}
+						onClick={this.submit.bind(this)}
+					>
+						Create Game
+					</Button>
 				</Grid>
 			</Grid>
 		)
