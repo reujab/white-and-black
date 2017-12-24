@@ -32,7 +32,7 @@ class Settings extends React.Component {
 		return (
 			!isNaN(scoreLimit) &&
 			!isNaN(blankCards) &&
-			scoreLimit > 1 &&
+			scoreLimit > 0 &&
 			scoreLimit <= 255 &&
 			blankCards >= 0 &&
 			blankCards <= 255 &&
