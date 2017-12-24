@@ -22,6 +22,7 @@ class Game extends React.Component {
 			started: true, // assume game has started until told otherwise
 			blackCard: null,
 			hand: [],
+			selected: null,
 		}
 	}
 
@@ -89,8 +90,14 @@ class Game extends React.Component {
 						lg={12 - 2}
 						style={"orientation" in window ? {padding: 0} : {}}
 					>
-						<BlackCard>{this.state.blackCard}</BlackCard>
-						<WhiteCards onSelect={(selectedCard) => console.log(selectedCard)}>{this.state.hand}</WhiteCards>
+						<BlackCard selected={this.state.selected}>{this.state.blackCard}</BlackCard>
+						<WhiteCards onSelect={(card) => this.send({
+							id: "select",
+							card,
+						})}
+						>
+							{this.state.hand}
+						</WhiteCards>
 					</Grid>
 				</Grid>
 			</Fragment>

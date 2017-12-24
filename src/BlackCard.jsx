@@ -1,12 +1,21 @@
 import PropTypes from "prop-types"
-import React from "react"
+import React, {Fragment} from "react"
 
 class BlackCard extends React.Component {
 	render() {
-		return this.props.children && (
-			<div className="card-wrapper">
-				<div className="card black" dangerouslySetInnerHTML={{__html: this.props.children.text.replace(/_/g, "________")}} />
+		const selected = this.props.selected && this.props.selected.map((card) => (
+			<div key={card} className="card-wrapper">
+				<div className="card white" dangerouslySetInnerHTML={{__html: card}} />
 			</div>
+		))
+
+		return this.props.children && (
+			<Fragment>
+				<div className="card-wrapper">
+					<div className="card black" dangerouslySetInnerHTML={{__html: this.props.children.text.replace(/_/g, "________")}} />
+				</div>
+				{selected}
+			</Fragment>
 		)
 	}
 }
@@ -16,6 +25,7 @@ BlackCard.propTypes = {
 		pick: PropTypes.number,
 		text: PropTypes.string,
 	}),
+	selected: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default BlackCard

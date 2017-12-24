@@ -93,18 +93,58 @@ func (game *Game) Start() {
 	game.UpdateGameState(nil)
 }
 
+// SelectCard selects a card to be played.
+func (game *Game) SelectCard(player *Player, card string) {
+	// czars cannot select cards
+	if player.Czar {
+		return
+	}
+
+	if len(player.Selected) == game.BlackCard.Pick {
+		return
+	}
+
+	var hasCard bool
+	for i := range player.Hand {
+		if player.Hand[i] == card {
+			hasCard = true
+			// remove card from hand
+			player.Hand[i] = game.Deck.White[0]
+			game.Deck.White = game.Deck.White[1:]
+			break
+		}
+	}
+	if !hasCard {
+		return
+	}
+
+	player.Selected = append(player.Selected, card)
+
+	// DEBUG
+	if len(player.Selected) == game.BlackCard.Pick {
+		game.BlackCard = &game.Deck.Black[0]
+		game.Deck.Black = game.Deck.Black[1:]
+		player.Selected = nil
+	}
+
+	player.UpdateHand()
+	game.UpdateGameState(nil)
+}
+
 // Player represents a player.
 type Player struct {
 	WS       *websocket.Conn
 	Username string
 	Czar     bool
 	Hand     []string
+	Selected []string
 }
 
 // UpdateHand sends the hand that the player has.
 func (player Player) UpdateHand() {
 	player.WS.WriteJSON(map[string][]string{
-		"hand": player.Hand,
+		"hand":     player.Hand,
+		"selected": player.Selected,
 	})
 }
 
@@ -174,14 +214,16 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 	player.UpdateHand()
 
 	for {
-		var res map[string]string
+		var res map[string]interface{}
 		if ws.ReadJSON(&res) != nil {
 			break
 		}
 
-		switch res["id"] {
+		switch res["id"].(string) {
 		case "start":
 			game.Start()
+		case "select":
+			game.SelectCard(player, res["card"].(string))
 		default:
 			pp.Println(res)
 		}
