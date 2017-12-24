@@ -167,8 +167,7 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 
 	for {
 		var res map[string]string
-		err := ws.ReadJSON(&res)
-		if err != nil {
+		if ws.ReadJSON(&res) != nil {
 			break
 		}
 
