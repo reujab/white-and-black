@@ -24,13 +24,13 @@ class PlayerList extends React.Component {
 			return (
 				<ListItem key={player.username} button>
 					{!player.online && (
-						<Tooltip title="Card Czar">
+						<Tooltip title="Offline">
 							<ListItemIcon>
 								<Warning />
 							</ListItemIcon>
 						</Tooltip>
 					) || player.czar && (
-						<Tooltip title="Offline">
+						<Tooltip title="Card Czar">
 							<ListItemIcon>
 								<Star />
 							</ListItemIcon>
