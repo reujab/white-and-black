@@ -19,8 +19,14 @@ var (
 
 // Deck represents a deck.
 type Deck struct {
-	Black []string
+	Black []BlackCard
 	White []string
+}
+
+// BlackCard represents a black card.
+type BlackCard struct {
+	Pick int    `json:"pick"`
+	Text string `json:"text"`
 }
 
 var templates = template.Must(template.ParseGlob("src/*.tmpl"))

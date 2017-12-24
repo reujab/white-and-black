@@ -14,7 +14,7 @@ type Game struct {
 	Deck       Deck
 	Players    []*Player
 	Owner      string
-	BlackCard  string
+	BlackCard  *BlackCard
 }
 
 // UpdatePlayers sends an updated list of players to every connected websocket.
@@ -75,7 +75,7 @@ func (game *Game) Start() {
 	}
 
 	// set black card
-	game.BlackCard = game.Deck.Black[0]
+	game.BlackCard = &game.Deck.Black[0]
 	game.Deck.Black = game.Deck.Black[1:]
 
 	// give every player a hand of cards
