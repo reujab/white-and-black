@@ -20,7 +20,7 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 		Owner      string
 	}
 	err := json.NewDecoder(req.Body).Decode(&settings)
-	if err != nil || settings.ScoreLimit < 1 {
+	if err != nil || settings.ScoreLimit == 0 || len(settings.Decks) == 0 {
 		http.Error(res, "Bad Request", 400)
 		return
 	}
@@ -43,18 +43,13 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 		defer file.Close()
 
 		var deck Deck
-		err = json.NewDecoder(file).Decode(&deck)
-		die(err)
+		die(json.NewDecoder(file).Decode(&deck))
 
 		game.Deck.Black = append(game.Deck.Black, deck.Black...)
 		game.Deck.White = append(game.Deck.White, deck.White...)
 	}
 	for i := byte(0); i < settings.BlankCards; i++ {
 		game.Deck.White = append(game.Deck.White, "_")
-	}
-	if len(game.Deck.Black) == 0 || len(game.Deck.White) == 0 {
-		http.Error(res, "Bad Request", 400)
-		return
 	}
 
 	// shuffle decks
