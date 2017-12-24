@@ -147,6 +147,14 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 			return
 		}
 
+		// or there are too many players
+		if len(game.Players) == 5 {
+			ws.WriteJSON(map[string]string{
+				"error": "There are already five players",
+			})
+			return
+		}
+
 		player = &Player{
 			Username: username,
 			WS:       ws,
