@@ -74,11 +74,6 @@ func (game *Game) Start() {
 		}
 	}
 
-	// HACK: ensure there are enough cards
-	if len(game.Deck.White) < len(game.Players)*10 {
-		panic("not enough cards") // FIXME: properly handle error
-	}
-
 	// set black card
 	game.BlackCard = game.Deck.Black[0]
 	game.Deck.Black = game.Deck.Black[1:]
