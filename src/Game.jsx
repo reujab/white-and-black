@@ -18,10 +18,10 @@ class Game extends React.Component {
 		this.state = {
 			error: "",
 			username: localStorage.username || "",
-			started: true, // assume game has started until told otherwise
 			players: [],
-			hand: [],
+			started: true, // assume game has started until told otherwise
 			blackCard: null,
+			hand: [],
 		}
 	}
 
