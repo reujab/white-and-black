@@ -6,20 +6,20 @@ class MiniCard extends React.Component {
 		return (
 			<div
 				style={{
-					display: "inline-flex",
 					alignItems: "center",
+					display: "inline-flex",
 					marginRight: 25,
 				}}
 			>
 				<div
 					style={{
-						width: 20,
-						height: 30,
-						display: "inline-block",
-						borderRadius: 3,
 						background: this.props.color,
 						border: "1px solid black",
+						borderRadius: 3,
+						display: "inline-block",
+						height: 30,
 						marginRight: 5,
+						width: 20,
 					}}
 				/>
 				{this.props.children}
