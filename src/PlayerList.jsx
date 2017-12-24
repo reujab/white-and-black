@@ -61,7 +61,7 @@ class PlayerList extends React.Component {
 						}}
 						onClick={this.props.onStart}
 					>
-								Start Game
+						Start Game
 					</Button>
 				)}
 			</List>
