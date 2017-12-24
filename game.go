@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/gorilla/websocket"
@@ -111,7 +110,6 @@ type Player struct {
 
 // UpdateHand sends the hand that the player has.
 func (player Player) UpdateHand() {
-	fmt.Println(player.Hand == nil)
 	player.WS.WriteJSON(map[string]interface{}{
 		"id":   "hand",
 		"hand": player.Hand,
