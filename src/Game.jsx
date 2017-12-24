@@ -9,7 +9,7 @@ import Header from "./Header"
 import Grid from "material-ui/Grid"
 import PlayerList from "./PlayerList"
 import BlackCard from "./BlackCard"
-import Hand from "./Hand"
+import WhiteCards from "./WhiteCards"
 
 class Game extends React.Component {
 	constructor(props) {
@@ -91,7 +91,7 @@ class Game extends React.Component {
 						style={"orientation" in window ? {padding: 0} : {}}
 					>
 						<BlackCard>{this.state.blackCard}</BlackCard>
-						<Hand onSelect={(selectedCard) => console.log(selectedCard)}>{this.state.hand}</Hand>
+						<WhiteCards onSelect={(selectedCard) => console.log(selectedCard)}>{this.state.hand}</WhiteCards>
 					</Grid>
 				</Grid>
 			</Fragment>

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 import React from "react"
 
-class Hand extends React.Component {
+class WhiteCards extends React.Component {
 	constructor(props) {
 		super(props)
 
@@ -34,9 +34,9 @@ class Hand extends React.Component {
 	}
 }
 
-Hand.propTypes = {
+WhiteCards.propTypes = {
 	children: PropTypes.arrayOf(PropTypes.string).isRequired,
 	onSelect: PropTypes.func.isRequired,
 }
 
-export default Hand
+export default WhiteCards
