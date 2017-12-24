@@ -5,7 +5,7 @@ class BlackCard extends React.Component {
 	render() {
 		return this.props.children ? (
 			<div className="card-wrapper">
-				<div className="card black">{this.props.children}</div>
+				<div className="card black">{this.props.children.replace(/_/g, "________")}</div>
 			</div>
 		) : null
 	}

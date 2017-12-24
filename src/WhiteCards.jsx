@@ -24,7 +24,7 @@ class WhiteCards extends React.Component {
 					<div key={card === "_" ? i : card /* HACK: allow multiple blank cards */} className="card-wrapper">
 						<div
 							className={`card white ${this.state.selected === card ? "selected" : ""}`}
-							dangerouslySetInnerHTML={{__html: card}}
+							dangerouslySetInnerHTML={{__html: card === "_" ? "________" : card}}
 							onClick={() => this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: card})}
 						/>
 					</div>
