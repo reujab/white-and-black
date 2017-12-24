@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500")
 @import "~normalize.css/normalize"
 
+$card-size: 175px
+
 html
 	font-family: Roboto
 
@@ -9,20 +11,20 @@ html
 	display: inline-flex
 	font-family: Helvetica
 	font-size: 1.25em
-	height: 220px
+	height: $card-size + 20px
 	justify-content: center
 	vertical-align: top
 	white-space: normal
-	width: 220px
+	width: $card-size + 20px
 
 .card
 	border-radius: 10px
 	border: 1px solid black
 	box-sizing: border-box
-	height: 200px
+	height: $card-size
 	padding: 10px
 	transition: 200ms
-	width: 200px
+	width: $card-size
 
 	&.black
 		background: black
@@ -34,5 +36,5 @@ html
 		cursor: pointer
 
 	&.selected
-		height: 210px
-		width: 210px
+		height: $card-size + 10px
+		width: $card-size + 10px
