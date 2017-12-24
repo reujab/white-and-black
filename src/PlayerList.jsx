@@ -72,10 +72,10 @@ class PlayerList extends React.Component {
 PlayerList.propTypes = {
 	onStart: PropTypes.func.isRequired,
 	players: PropTypes.arrayOf(PropTypes.shape({
-		username: PropTypes.string.isRequired,
-		online: PropTypes.bool.isRequired,
 		czar: PropTypes.bool.isRequired,
+		online: PropTypes.bool.isRequired,
 		owner: PropTypes.bool.isRequired,
+		username: PropTypes.string.isRequired,
 	})).isRequired,
 	started: PropTypes.bool.isRequired,
 	username: PropTypes.string.isRequired,
