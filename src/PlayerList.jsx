@@ -23,16 +23,16 @@ class PlayerList extends React.Component {
 			/* eslint-disable indent */
 			return (
 				<ListItem key={player.username} button>
-					{player.czar && (
+					{!player.online && (
 						<Tooltip title="Card Czar">
 							<ListItemIcon>
-								<Star />
+								<Warning />
 							</ListItemIcon>
 						</Tooltip>
-					) || !player.online && (
+					) || player.czar && (
 						<Tooltip title="Offline">
 							<ListItemIcon>
-								<Warning />
+								<Star />
 							</ListItemIcon>
 						</Tooltip>
 					)}
