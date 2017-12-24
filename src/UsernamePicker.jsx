@@ -15,17 +15,6 @@ class UsernamePicker extends React.Component {
 		}
 	}
 
-	setUsername() {
-		const username = this.state.input
-
-		if (username.length < 3) {
-			this.props.onError("Username too short")
-			return
-		}
-
-		this.props.onChange(username)
-	}
-
 	render() {
 		return (
 			<Fragment>
@@ -60,7 +49,13 @@ class UsernamePicker extends React.Component {
 							xs={6}
 							sm={12 - 8}
 						>
-							<Button raised onClick={this.setUsername.bind(this)}>Submit</Button>
+							<Button
+								raised
+								disabled={this.state.input.length < 3}
+								onClick={() => this.props.onChange(this.state.input)}
+							>
+								Submit
+							</Button>
 						</Grid>
 					</Grid>
 				</Dialog>
@@ -71,7 +66,6 @@ class UsernamePicker extends React.Component {
 
 UsernamePicker.propTypes = {
 	onChange: PropTypes.func.isRequired,
-	onError: PropTypes.func.isRequired,
 	username: PropTypes.string.isRequired,
 }
 

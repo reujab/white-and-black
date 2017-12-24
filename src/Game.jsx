@@ -60,7 +60,6 @@ class Game extends React.Component {
 				<UsernamePicker
 					username={this.state.username}
 					onChange={this.setUsername.bind(this)}
-					onError={(error) => this.setState({error})}
 				/>
 				<Header username={this.state.username} />
 				<Grid
