@@ -31,7 +31,6 @@ func (game *Game) UpdatePlayers() {
 	for _, player := range game.Players {
 		if player.WS != nil {
 			player.WS.WriteJSON(map[string]interface{}{
-				"id":      "players",
 				"players": players,
 			})
 		}
@@ -41,7 +40,6 @@ func (game *Game) UpdatePlayers() {
 // UpdateGameState sends an updated game state to the specified player.
 func (game *Game) UpdateGameState(player *Player) {
 	state := map[string]interface{}{
-		"id":        "game state",
 		"started":   game.Started,
 		"blackCard": game.BlackCard,
 	}
@@ -111,7 +109,6 @@ type Player struct {
 // UpdateHand sends the hand that the player has.
 func (player Player) UpdateHand() {
 	player.WS.WriteJSON(map[string]interface{}{
-		"id":   "hand",
 		"hand": player.Hand,
 	})
 }
@@ -137,8 +134,8 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 				player.WS = ws
 			} else {
 				ws.WriteJSON(map[string]string{
-					"id":  "error",
-					"err": "username taken",
+					"error":    "Username taken",
+					"username": "",
 				})
 				return
 			}
@@ -150,8 +147,7 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 		// unless the game has started
 		if game.Started {
 			ws.WriteJSON(map[string]string{
-				"id":  "error",
-				"err": "game started",
+				"error": "Game has already started",
 			})
 			return
 		}
@@ -182,7 +178,7 @@ func handlePlayer(game *Game, ws *websocket.Conn) {
 		}
 
 		switch res["id"] {
-		case "start game":
+		case "start":
 			game.Start()
 		default:
 			pp.Println(res)

@@ -43,44 +43,9 @@ class Game extends React.Component {
 			this.ws.send(username)
 		}
 		this.ws.onmessage = (e) => {
-			const res = JSON.parse(e.data)
-			switch (res.id) {
-			case "error":
-				switch (res.err) {
-				case "username taken":
-					this.setState({
-						username: "",
-						error: "Username taken",
-					})
-					break
-				case "game started":
-					this.setState({
-						error: "Game has already started",
-					})
-					break
-				default:
-					console.error("unknown err", res.err)
-				}
-				break
-			case "game state":
-				this.setState({
-					started: res.started,
-					blackCard: res.blackCard,
-				})
-				break
-			case "players":
-				this.setState({
-					players: res.players,
-				})
-				break
-			case "hand":
-				this.setState({
-					hand: res.hand,
-				})
-				break
-			default:
-				console.error("unknown msg", res)
-			}
+			const state = JSON.parse(e.data)
+			console.log(state)
+			this.setState(state)
 		}
 	}
 
@@ -115,7 +80,7 @@ class Game extends React.Component {
 							username={this.state.username}
 							players={this.state.players}
 							started={this.state.started}
-							onStart={() => this.send({id: "start game"})}
+							onStart={() => this.send({id: "start"})}
 						/>
 					</Grid>
 					<Grid
