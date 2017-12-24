@@ -20,8 +20,8 @@ class WhiteCards extends React.Component {
 					whiteSpace: "nowrap",
 				} : {}}
 			>
-				{this.props.children.map((card) => (
-					<div key={card} className="card-wrapper">
+				{this.props.children.map((card, i) => (
+					<div key={card === "_" ? i : card /* HACK: allow multiple blank cards */} className="card-wrapper">
 						<div
 							className={`card white ${this.state.selected === card ? "selected" : ""}`}
 							dangerouslySetInnerHTML={{__html: card}}
