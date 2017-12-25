@@ -8,11 +8,13 @@ import (
 
 // Game represents a game.
 type Game struct {
-	Started    bool
-	ScoreLimit byte
-	Deck       Deck
-	Players    []*Player
-	Owner      string
+	Started       bool
+	ScoreLimit    byte
+	Deck          Deck
+	Players       []*Player
+	Owner         string
+	CzarSelecting bool
+	CzarSelection [][]string
 }
 
 // UpdatePlayers sends an updated list of players to every connected websocket.
@@ -76,6 +78,9 @@ func (game *Game) Start() {
 	for _, player := range game.Players {
 		game.SendGameState(player)
 		game.SendBlackCard(player)
+		if player.Czar {
+			game.SendCzarSelection(player)
+		}
 	}
 }
 
@@ -139,6 +144,31 @@ func (game *Game) SelectCard(player *Player, card string) {
 
 	player.Selected = append(player.Selected, card)
 
+	// check if every player selected cards
+	if !game.CzarSelecting {
+		allCardsSelected := true
+		for _, player := range game.Players {
+			if !player.Czar && len(player.Selected) != game.Deck.Black[0].Pick {
+				allCardsSelected = false
+				break
+			}
+		}
+		if allCardsSelected {
+			game.CzarSelecting = true
+			for _, player := range game.Players {
+				if player.Selected != nil {
+					game.CzarSelection = append(game.CzarSelection, player.Selected)
+				}
+			}
+
+			// shuffle czar selection
+			for i := range game.CzarSelection {
+				j := rand.Intn(i + 1)
+				game.CzarSelection[i], game.CzarSelection[j] = game.CzarSelection[j], game.CzarSelection[i]
+			}
+		}
+	}
+
 	player.UpdateHand()
 	for _, player := range game.Players {
 		game.SendCzarSelection(player)
@@ -147,24 +177,12 @@ func (game *Game) SelectCard(player *Player, card string) {
 
 // SendCzarSelection sends the czar selection to the specified player.
 func (game *Game) SendCzarSelection(player *Player) {
-	var czarSelection [][]string
-	if player.Czar {
+	czarSelection := game.CzarSelection
+	if czarSelection == nil && player.Czar {
+		// TODO: show czar blank cards as players select cards
 		czarSelection = make([][]string, 0)
 	}
-	allCardsSelected := true
-	for _, player := range game.Players {
-		if !player.Czar && len(player.Selected) != game.Deck.Black[0].Pick {
-			allCardsSelected = false
-			break
-		}
-	}
-	if allCardsSelected {
-		for _, player := range game.Players {
-			if player.Selected != nil {
-				czarSelection = append(czarSelection, player.Selected)
-			}
-		}
-	}
+
 	player.WS.WriteJSON(map[string][][]string{
 		"czarSelection": czarSelection,
 	})
