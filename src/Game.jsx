@@ -78,10 +78,7 @@ class Game extends React.Component {
 			<Fragment>
 				<Snackbar open={!!this.state.error} message={this.state.error} />
 				<BlankCard show={this.state.fillingBlank} onChange={this.selectCard.bind(this)} />
-				<UsernamePicker
-					username={this.state.username}
-					onChange={this.setUsername.bind(this)}
-				/>
+				<UsernamePicker username={this.state.username} onChange={this.setUsername.bind(this)} />
 
 				<Header username={this.state.username} />
 				<Grid
