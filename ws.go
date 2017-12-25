@@ -83,7 +83,7 @@ func handleWS(res http.ResponseWriter, req *http.Request) {
 	game.SendGameState(player)
 	game.SendBlackCard(player)
 	game.SendCzarSelection(player)
-	player.UpdateHand()
+	player.SendHand()
 
 	for {
 		var res map[string]interface{}

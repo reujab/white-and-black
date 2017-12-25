@@ -67,7 +67,7 @@ func (game *Game) Start() {
 	for _, player := range game.Players {
 		player.Hand = game.Deck.White[:10]
 		game.Deck.White = game.Deck.White[10:]
-		player.UpdateHand()
+		player.SendHand()
 	}
 
 	// assign random player card czar
@@ -169,7 +169,7 @@ func (game *Game) SelectCard(player *Player, card string) {
 		}
 	}
 
-	player.UpdateHand()
+	player.SendHand()
 	for _, player := range game.Players {
 		game.SendCzarSelection(player)
 	}

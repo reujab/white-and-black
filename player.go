@@ -11,8 +11,8 @@ type Player struct {
 	Selected []string
 }
 
-// UpdateHand sends the hand that the player has.
-func (player *Player) UpdateHand() {
+// SendHand sends the hand that the player has.
+func (player *Player) SendHand() {
 	player.WS.WriteJSON(map[string][]string{
 		"hand":     player.Hand,
 		"selected": player.Selected,
