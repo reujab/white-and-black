@@ -1,5 +1,5 @@
 import PropTypes from "prop-types"
-import React, {Fragment} from "react"
+import React from "react"
 
 import Dialog, {DialogTitle} from "material-ui/Dialog"
 import Grid from "material-ui/Grid"
@@ -17,49 +17,47 @@ class UsernamePicker extends React.Component {
 
 	render() {
 		return (
-			<Fragment>
-				<Dialog open={!this.props.username}>
-					<DialogTitle>Set username</DialogTitle>
+			<Dialog open={!this.props.username}>
+				<DialogTitle>Set username</DialogTitle>
+				<Grid
+					container
+					style={{
+						margin: 0,
+						padding: 20,
+						width: "100%",
+					}}
+				>
 					<Grid
-						container
-						style={{
-							margin: 0,
-							padding: 20,
-							width: "100%",
-						}}
+						item
+						xs={12}
+						sm={8}
 					>
-						<Grid
-							item
-							xs={12}
-							sm={8}
-						>
-							<TextField
-								fullWidth
-								label="Username"
-								value={this.state.input}
-								InputProps={{inputProps: {maxLength: 16}}}
-								onChange={(e) => this.setState({
-									input: e.target.value,
-								})}
-								onKeyDown={(e) => e.key === "Enter" && this.props.onChange(this.state.input)}
-							/>
-						</Grid>
-						<Grid
-							item
-							xs={6}
-							sm={12 - 8}
-						>
-							<Button
-								raised
-								disabled={this.state.input.length < 3}
-								onClick={() => this.props.onChange(this.state.input)}
-							>
-								Submit
-							</Button>
-						</Grid>
+						<TextField
+							fullWidth
+							label="Username"
+							value={this.state.input}
+							InputProps={{inputProps: {maxLength: 16}}}
+							onChange={(e) => this.setState({
+								input: e.target.value,
+							})}
+							onKeyDown={(e) => e.key === "Enter" && this.props.onChange(this.state.input)}
+						/>
 					</Grid>
-				</Dialog>
-			</Fragment>
+					<Grid
+						item
+						xs={6}
+						sm={12 - 8}
+					>
+						<Button
+							raised
+							disabled={this.state.input.length < 3}
+							onClick={() => this.props.onChange(this.state.input)}
+						>
+								Submit
+						</Button>
+					</Grid>
+				</Grid>
+			</Dialog>
 		)
 	}
 }
