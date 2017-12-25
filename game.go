@@ -15,6 +15,7 @@ type Game struct {
 	Owner         string
 	CzarSelecting bool
 	CzarSelection [][]string
+	SelectedCards *int
 }
 
 // UpdatePlayers sends an updated list of players to every connected websocket.
@@ -191,6 +192,25 @@ func (game *Game) SendCzarSelection(player *Player) {
 
 	player.WS.WriteJSON(map[string][][]string{
 		"czarSelection": czarSelection,
+	})
+}
+
+// SelectCzarCard selects a white card from the czar's selection.
+func (game *Game) SelectCzarCard(player *Player, index int) {
+	if game.SelectedCards != nil || !player.Czar || !game.CzarSelecting {
+		return
+	}
+
+	game.SelectedCards = &index
+	for _, player := range game.Players {
+		game.SendHighlightedCard(player)
+	}
+}
+
+// SendHighlightedCard sends the highlighted czar card to the specified player.
+func (game *Game) SendHighlightedCard(player *Player) {
+	player.WS.WriteJSON(map[string]*int{
+		"highlighted": game.SelectedCards,
 	})
 }
 

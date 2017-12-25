@@ -83,6 +83,7 @@ func handleWS(res http.ResponseWriter, req *http.Request) {
 	game.SendGameState(player)
 	game.SendBlackCard(player)
 	game.SendCzarSelection(player)
+	game.SendHighlightedCard(player)
 	player.SendHand()
 
 	for {
@@ -95,7 +96,11 @@ func handleWS(res http.ResponseWriter, req *http.Request) {
 		case "start":
 			game.Start()
 		case "select":
-			game.SelectCard(player, res["card"].(string))
+			if player.Czar {
+				game.SelectCzarCard(player, int(res["card"].(float64)))
+			} else {
+				game.SelectCard(player, res["card"].(string))
+			}
 		default:
 			pp.Println(res)
 		}

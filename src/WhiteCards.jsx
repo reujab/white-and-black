@@ -2,14 +2,6 @@ import PropTypes from "prop-types"
 import React from "react"
 
 class WhiteCards extends React.Component {
-	constructor(props) {
-		super(props)
-
-		this.state = {
-			selected: null,
-		}
-	}
-
 	render() {
 		/* eslint-disable indent */
 		return (
@@ -26,9 +18,9 @@ class WhiteCards extends React.Component {
 						{cards.map((card, j) => (
 							<div key={card === "" ? j : card} className="card-wrapper">
 								<div
-									className={`card white ${this.state.selected === i ? "selected" : ""} ${this.props.czar && card ? "" : "disabled"}`}
+									className={`card white ${this.props.highlighted === i ? "highlighted" : ""} ${this.props.czar && card ? "" : "disabled"}`}
 									dangerouslySetInnerHTML={{__html: card}}
-									onClick={() => this.props.czar && card && (this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: i}))}
+									onClick={() => this.props.czar && card && this.props.onClick(i)}
 								/>
 							</div>
 						))}
@@ -36,9 +28,9 @@ class WhiteCards extends React.Component {
 				)) || this.props.hand && this.props.hand.map((card, i) => (
 					<div key={card === "_" ? i : card} className="card-wrapper">
 						<div
-							className={`card white ${this.state.selected === card ? "selected" : ""}`}
+							className={`card white ${this.props.highlighted === card ? "highlighted" : ""}`}
 							dangerouslySetInnerHTML={{__html: card === "_" ? "________" : card}}
-							onClick={() => this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: card})}
+							onClick={() => this.props.onClick(card)}
 						/>
 					</div>
 				))}
@@ -52,7 +44,11 @@ WhiteCards.propTypes = {
 	czar: PropTypes.bool.isRequired,
 	czarSelection: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
 	hand: PropTypes.arrayOf(PropTypes.string).isRequired,
-	onSelect: PropTypes.func.isRequired,
+	highlighted: PropTypes.oneOfType([
+		PropTypes.string,
+		PropTypes.number,
+	]),
+	onClick: PropTypes.func.isRequired,
 }
 
 export default WhiteCards

@@ -25,6 +25,7 @@ class Game extends React.Component {
 			started: true, // assume game has started until told otherwise
 			blackCard: null,
 			hand: [],
+			highlighted: null,
 			selected: null,
 		}
 	}
@@ -58,17 +59,31 @@ class Game extends React.Component {
 	}
 
 	selectCard(card) {
-		if (card === "_") {
-			this.setState({
-				fillingBlank: true,
-			})
-		} else {
+		if (this.state.highlighted === card) {
+			// card is already highlighted
+			if (card === "_") {
+				this.setState({
+					fillingBlank: true,
+				})
+			} else {
+				this.send({
+					id: "select",
+					card,
+				})
+			}
+		} else if (this.state.fillingBlank) {
+			// blank card was previously selected
 			this.setState({
 				fillingBlank: false,
 			})
 			this.send({
 				id: "select",
 				card,
+			})
+		} else {
+			// card is not yet highlighted
+			this.setState({
+				highlighted: card,
 			})
 		}
 	}
@@ -113,7 +128,8 @@ class Game extends React.Component {
 							hand={this.state.hand}
 							czarSelection={this.state.czarSelection}
 							czar={this.state.players.some((player) => player.username === this.state.username && player.czar)}
-							onSelect={this.selectCard.bind(this)}
+							highlighted={this.state.highlighted}
+							onClick={this.selectCard.bind(this)}
 						/>
 					</Grid>
 				</Grid>
