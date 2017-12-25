@@ -80,7 +80,9 @@ func handleWS(res http.ResponseWriter, req *http.Request) {
 	}()
 
 	game.UpdatePlayers()
-	game.UpdateGameState(player)
+	game.SendGameState(player)
+	game.SendBlackCard(player)
+	game.SendCzarSelection(player)
 	player.UpdateHand()
 
 	for {

@@ -7,13 +7,11 @@ import (
 
 // Game represents a game.
 type Game struct {
-	Started       bool
-	ScoreLimit    byte
-	Deck          Deck
-	Players       []*Player
-	Owner         string
-	BlackCard     *BlackCard
-	CzarSelecting bool
+	Started    bool
+	ScoreLimit byte
+	Deck       Deck
+	Players    []*Player
+	Owner      string
 }
 
 // UpdatePlayers sends an updated list of players to every connected websocket.
@@ -36,30 +34,11 @@ func (game *Game) UpdatePlayers() {
 	}
 }
 
-// UpdateGameState sends an updated game state to the specified player.
-func (game *Game) UpdateGameState(player *Player) {
-	if player.WS == nil {
-		return
-	}
-
-	state := map[string]interface{}{
-		"started":   game.Started,
-		"blackCard": game.BlackCard,
-	}
-	var czarSelection [][]string
-	if player.Czar {
-		czarSelection = make([][]string, 0)
-	}
-	if game.CzarSelecting {
-		for _, player := range game.Players {
-			if player.Selected != nil {
-				czarSelection = append(czarSelection, player.Selected)
-			}
-		}
-	}
-	state["czarSelection"] = czarSelection
-
-	player.WS.WriteJSON(state)
+// SendGameState sends an updated game state to the specified player.
+func (game *Game) SendGameState(player *Player) {
+	player.WS.WriteJSON(map[string]bool{
+		"started": game.Started,
+	})
 }
 
 // Start starts the game.
@@ -81,10 +60,6 @@ func (game *Game) Start() {
 		}
 	}
 
-	// set black card
-	game.BlackCard = &game.Deck.Black[0]
-	game.Deck.Black = game.Deck.Black[1:]
-
 	// give every player a hand of cards
 	for _, player := range game.Players {
 		player.Hand = game.Deck.White[:10]
@@ -98,7 +73,17 @@ func (game *Game) Start() {
 	game.Started = true
 	game.UpdatePlayers()
 	for _, player := range game.Players {
-		game.UpdateGameState(player)
+		game.SendGameState(player)
+		game.SendBlackCard(player)
+	}
+}
+
+// SendBlackCard sends the current black card to the specified player.
+func (game *Game) SendBlackCard(player *Player) {
+	if game.Started {
+		player.WS.WriteJSON(map[string]BlackCard{
+			"blackCard": game.Deck.Black[0],
+		})
 	}
 }
 
@@ -111,7 +96,7 @@ func (game *Game) SelectCard(player *Player, card string) {
 		return
 	}
 
-	if len(player.Selected) == game.BlackCard.Pick {
+	if len(player.Selected) == game.Deck.Black[0].Pick {
 		return
 	}
 
@@ -132,22 +117,35 @@ func (game *Game) SelectCard(player *Player, card string) {
 
 	player.Selected = append(player.Selected, card)
 
-	// check if every player submitted cards
+	player.UpdateHand()
+	for _, player := range game.Players {
+		game.SendCzarSelection(player)
+	}
+}
+
+// SendCzarSelection sends the czar selection to the specified player.
+func (game *Game) SendCzarSelection(player *Player) {
+	var czarSelection [][]string
+	if player.Czar {
+		czarSelection = make([][]string, 0)
+	}
 	allCardsSelected := true
 	for _, player := range game.Players {
-		if !player.Czar && len(player.Selected) != game.BlackCard.Pick {
+		if !player.Czar && len(player.Selected) != game.Deck.Black[0].Pick {
 			allCardsSelected = false
 			break
 		}
 	}
 	if allCardsSelected {
-		game.CzarSelecting = true
+		for _, player := range game.Players {
+			if player.Selected != nil {
+				czarSelection = append(czarSelection, player.Selected)
+			}
+		}
 	}
-
-	player.UpdateHand()
-	for _, player := range game.Players {
-		game.UpdateGameState(player)
-	}
+	player.WS.WriteJSON(map[string][][]string{
+		"czarSelection": czarSelection,
+	})
 }
 
 func getGame(id string) *Game {
