@@ -94,6 +94,7 @@ class Game extends React.Component {
 						<WhiteCards
 							hand={this.state.hand}
 							czarSelection={this.state.czarSelection}
+							czar={this.state.players.some((player) => player.username === this.state.username && player.czar)}
 							onSelect={(card) => this.send({
 								id: "select",
 								card,

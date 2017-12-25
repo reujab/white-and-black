@@ -26,9 +26,9 @@ class WhiteCards extends React.Component {
 						{cards.map((card) => (
 							<div key={card} className="card-wrapper">
 								<div
-									className={`card white ${this.state.selected === card ? "selected" : ""}`}
+									className={`card white ${this.state.selected === card ? "selected" : ""} ${this.props.czar ? "" : "disabled"}`}
 									dangerouslySetInnerHTML={{__html: card}}
-									onClick={() => this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: card})}
+									onClick={() => this.props.czar && (this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: card}))}
 								/>
 							</div>
 						))}
@@ -49,6 +49,7 @@ class WhiteCards extends React.Component {
 }
 
 WhiteCards.propTypes = {
+	czar: PropTypes.bool.isRequired,
 	czarSelection: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
 	hand: PropTypes.arrayOf(PropTypes.string).isRequired,
 	onSelect: PropTypes.func.isRequired,
