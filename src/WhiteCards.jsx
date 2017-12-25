@@ -21,14 +21,14 @@ class WhiteCards extends React.Component {
 					whiteSpace: "nowrap",
 				} : {}}
 			>
-				{this.props.czarSelection && this.props.czarSelection.map((cards) => (
+				{this.props.czarSelection && this.props.czarSelection.map((cards, i) => (
 					<div key={cards} className="selection-wrapper">
 						{cards.map((card) => (
 							<div key={card} className="card-wrapper">
 								<div
-									className={`card white ${this.state.selected === card ? "selected" : ""} ${this.props.czar ? "" : "disabled"}`}
+									className={`card white ${this.state.selected === i ? "selected" : ""} ${this.props.czar ? "" : "disabled"}`}
 									dangerouslySetInnerHTML={{__html: card}}
-									onClick={() => this.props.czar && (this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: card}))}
+									onClick={() => this.props.czar && (this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: i}))}
 								/>
 							</div>
 						))}
