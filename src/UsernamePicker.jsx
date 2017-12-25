@@ -53,7 +53,7 @@ class UsernamePicker extends React.Component {
 							disabled={this.state.input.length < 3}
 							onClick={() => this.props.onChange(this.state.input)}
 						>
-								Submit
+							Submit
 						</Button>
 					</Grid>
 				</Grid>
