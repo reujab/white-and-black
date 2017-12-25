@@ -90,7 +90,7 @@ class Game extends React.Component {
 						lg={12 - 2}
 						style={"orientation" in window ? {padding: 0} : {}}
 					>
-						<BlackCard selected={this.state.selected}>{this.state.blackCard}</BlackCard>
+						<BlackCard selected={this.state.czarSelection ? null : this.state.selected}>{this.state.blackCard}</BlackCard>
 						<WhiteCards
 							hand={this.state.hand}
 							czarSelection={this.state.czarSelection}
