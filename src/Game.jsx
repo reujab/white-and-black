@@ -4,6 +4,7 @@ import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 
 import Snackbar from "material-ui/Snackbar"
+import BlankCard from "./BlankCard"
 import UsernamePicker from "./UsernamePicker"
 import Header from "./Header"
 import Grid from "material-ui/Grid"
@@ -16,8 +17,10 @@ class Game extends React.Component {
 		super(props)
 
 		this.state = {
-			error: "",
 			username: localStorage.username || "",
+			fillingBlank: false,
+
+			error: "",
 			players: [],
 			started: true, // assume game has started until told otherwise
 			blackCard: null,
@@ -54,10 +57,28 @@ class Game extends React.Component {
 		this.ws.send(JSON.stringify(msg))
 	}
 
+	selectCard(card) {
+		if (card === "_") {
+			this.setState({
+				fillingBlank: true,
+			})
+		} else {
+			this.setState({
+				fillingBlank: false,
+			})
+			this.send({
+				id: "select",
+				card,
+			})
+		}
+	}
+
 	render() {
 		return (
 			<Fragment>
 				<Snackbar open={!!this.state.error} message={this.state.error} />
+				<BlankCard show={this.state.fillingBlank} onChange={this.selectCard.bind(this)} />
+
 				<UsernamePicker
 					username={this.state.username}
 					onChange={this.setUsername.bind(this)}
@@ -95,10 +116,7 @@ class Game extends React.Component {
 							hand={this.state.hand}
 							czarSelection={this.state.czarSelection}
 							czar={this.state.players.some((player) => player.username === this.state.username && player.czar)}
-							onSelect={(card) => this.send({
-								id: "select",
-								card,
-							})}
+							onSelect={this.selectCard.bind(this)}
 						/>
 					</Grid>
 				</Grid>

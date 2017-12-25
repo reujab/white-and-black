@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"strings"
 	"sync"
 )
 
@@ -91,6 +92,10 @@ func (game *Game) SendBlackCard(player *Player) {
 func (game *Game) SelectCard(player *Player, card string) {
 	// TODO: handle when game.CzarSelecting
 
+	if len(card) > 1024 {
+		return
+	}
+
 	// czars cannot select cards
 	if player.Czar {
 		return
@@ -111,8 +116,25 @@ func (game *Game) SelectCard(player *Player, card string) {
 		}
 	}
 	if !hasCard {
-		// TODO: allow blank cards
-		return
+		var hasBlank bool
+		for i := range player.Hand {
+			if player.Hand[i] == "_" {
+				hasBlank = true
+
+				// sanitize input
+				card = strings.Replace(card, "&", "&amp;", -1)
+				card = strings.Replace(card, "<", "&lt;", -1)
+				card = strings.Replace(card, ">", "&gt;", -1)
+
+				// remove card from hand
+				player.Hand[i] = game.Deck.White[0]
+				game.Deck.White = game.Deck.White[1:]
+				break
+			}
+		}
+		if !hasBlank {
+			return
+		}
 	}
 
 	player.Selected = append(player.Selected, card)
