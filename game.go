@@ -7,12 +7,13 @@ import (
 
 // Game represents a game.
 type Game struct {
-	Started    bool
-	ScoreLimit byte
-	Deck       Deck
-	Players    []*Player
-	Owner      string
-	BlackCard  *BlackCard
+	Started       bool
+	ScoreLimit    byte
+	Deck          Deck
+	Players       []*Player
+	Owner         string
+	BlackCard     *BlackCard
+	CzarSelecting bool
 }
 
 // UpdatePlayers sends an updated list of players to every connected websocket.
@@ -37,20 +38,28 @@ func (game *Game) UpdatePlayers() {
 
 // UpdateGameState sends an updated game state to the specified player.
 func (game *Game) UpdateGameState(player *Player) {
+	if player.WS == nil {
+		return
+	}
+
 	state := map[string]interface{}{
 		"started":   game.Started,
 		"blackCard": game.BlackCard,
 	}
-
-	if player == nil {
+	var czarSelection [][]string
+	if player.Czar {
+		czarSelection = make([][]string, 0)
+	}
+	if game.CzarSelecting {
 		for _, player := range game.Players {
-			if player.WS != nil {
-				player.WS.WriteJSON(state)
+			if player.Selected != nil {
+				czarSelection = append(czarSelection, player.Selected)
 			}
 		}
-	} else {
-		player.WS.WriteJSON(state)
 	}
+	state["czarSelection"] = czarSelection
+
+	player.WS.WriteJSON(state)
 }
 
 // Start starts the game.
@@ -88,11 +97,15 @@ func (game *Game) Start() {
 
 	game.Started = true
 	game.UpdatePlayers()
-	game.UpdateGameState(nil)
+	for _, player := range game.Players {
+		game.UpdateGameState(player)
+	}
 }
 
 // SelectCard selects a card to be played.
 func (game *Game) SelectCard(player *Player, card string) {
+	// TODO: handle when game.CzarSelecting
+
 	// czars cannot select cards
 	if player.Czar {
 		return
@@ -113,20 +126,28 @@ func (game *Game) SelectCard(player *Player, card string) {
 		}
 	}
 	if !hasCard {
+		// TODO: allow blank cards
 		return
 	}
 
 	player.Selected = append(player.Selected, card)
 
-	// DEBUG
-	if len(player.Selected) == game.BlackCard.Pick {
-		game.BlackCard = &game.Deck.Black[0]
-		game.Deck.Black = game.Deck.Black[1:]
-		player.Selected = nil
+	// check if every player submitted cards
+	allCardsSelected := true
+	for _, player := range game.Players {
+		if !player.Czar && len(player.Selected) != game.BlackCard.Pick {
+			allCardsSelected = false
+			break
+		}
+	}
+	if allCardsSelected {
+		game.CzarSelecting = true
 	}
 
 	player.UpdateHand()
-	game.UpdateGameState(nil)
+	for _, player := range game.Players {
+		game.UpdateGameState(player)
+	}
 }
 
 func getGame(id string) *Game {

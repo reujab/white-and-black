@@ -1,10 +1,14 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500")
 @import "~normalize.css/normalize"
 
-$card-size: 175px
+$card-size: 180px
 
 html
 	font-family: Roboto
+
+.selection-wrapper
+	display: inline-block
+	margin-right: 10px
 
 .card-wrapper
 	align-items: center
@@ -34,6 +38,7 @@ html
 		background: white
 		color: black
 		cursor: pointer
+		user-select: none
 
 	&.selected
 		height: $card-size + 10px

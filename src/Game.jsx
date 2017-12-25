@@ -91,13 +91,14 @@ class Game extends React.Component {
 						style={"orientation" in window ? {padding: 0} : {}}
 					>
 						<BlackCard selected={this.state.selected}>{this.state.blackCard}</BlackCard>
-						<WhiteCards onSelect={(card) => this.send({
-							id: "select",
-							card,
-						})}
-						>
-							{this.state.hand}
-						</WhiteCards>
+						<WhiteCards
+							hand={this.state.hand}
+							czarSelection={this.state.czarSelection}
+							onSelect={(card) => this.send({
+								id: "select",
+								card,
+							})}
+						/>
 					</Grid>
 				</Grid>
 			</Fragment>

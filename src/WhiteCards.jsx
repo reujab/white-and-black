@@ -11,6 +11,7 @@ class WhiteCards extends React.Component {
 	}
 
 	render() {
+		/* eslint-disable indent */
 		return (
 			<div
 				style={"orientation" in window ? {
@@ -20,8 +21,20 @@ class WhiteCards extends React.Component {
 					whiteSpace: "nowrap",
 				} : {}}
 			>
-				{this.props.children.map((card, i) => (
-					<div key={card === "_" ? i : card /* HACK: allow multiple blank cards */} className="card-wrapper">
+				{this.props.czarSelection && this.props.czarSelection.map((cards) => (
+					<div key={cards} className="selection-wrapper">
+						{cards.map((card) => (
+							<div key={card} className="card-wrapper">
+								<div
+									className={`card white ${this.state.selected === card ? "selected" : ""}`}
+									dangerouslySetInnerHTML={{__html: card}}
+									onClick={() => this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: card})}
+								/>
+							</div>
+						))}
+					</div>
+				)) || this.props.hand && this.props.hand.map((card, i) => (
+					<div key={card === "_" ? i : card} className="card-wrapper">
 						<div
 							className={`card white ${this.state.selected === card ? "selected" : ""}`}
 							dangerouslySetInnerHTML={{__html: card === "_" ? "________" : card}}
@@ -31,11 +44,13 @@ class WhiteCards extends React.Component {
 				))}
 			</div>
 		)
+		/* eslint-enable */
 	}
 }
 
 WhiteCards.propTypes = {
-	children: PropTypes.arrayOf(PropTypes.string).isRequired,
+	czarSelection: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+	hand: PropTypes.arrayOf(PropTypes.string).isRequired,
 	onSelect: PropTypes.func.isRequired,
 }
 
