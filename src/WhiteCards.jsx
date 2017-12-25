@@ -23,12 +23,12 @@ class WhiteCards extends React.Component {
 			>
 				{this.props.czarSelection && this.props.czarSelection.map((cards, i) => (
 					<div key={cards} className="selection-wrapper">
-						{cards.map((card) => (
-							<div key={card} className="card-wrapper">
+						{cards.map((card, j) => (
+							<div key={card === "" ? j : card} className="card-wrapper">
 								<div
-									className={`card white ${this.state.selected === i ? "selected" : ""} ${this.props.czar ? "" : "disabled"}`}
+									className={`card white ${this.state.selected === i ? "selected" : ""} ${this.props.czar && card ? "" : "disabled"}`}
 									dangerouslySetInnerHTML={{__html: card}}
-									onClick={() => this.props.czar && (this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: i}))}
+									onClick={() => this.props.czar && card && (this.state.selected === card ? this.props.onSelect(card) : this.setState({selected: i}))}
 								/>
 							</div>
 						))}

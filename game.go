@@ -179,8 +179,14 @@ func (game *Game) SelectCard(player *Player, card string) {
 func (game *Game) SendCzarSelection(player *Player) {
 	czarSelection := game.CzarSelection
 	if czarSelection == nil && player.Czar {
-		// TODO: show czar blank cards as players select cards
+		// initialize slice
 		czarSelection = make([][]string, 0)
+
+		for _, player := range game.Players {
+			if player.Selected != nil {
+				czarSelection = append(czarSelection, make([]string, len(player.Selected)))
+			}
+		}
 	}
 
 	player.WS.WriteJSON(map[string][][]string{
