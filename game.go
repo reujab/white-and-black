@@ -166,7 +166,9 @@ func (game *Game) SelectCard(player *Player, card string) {
 
 	player.SendHand()
 	for _, player := range game.Players {
-		game.SendCzarSelection(player)
+		if player.WS != nil {
+			game.SendCzarSelection(player)
+		}
 	}
 }
 
@@ -198,13 +200,17 @@ func (game *Game) SelectCzarCard(player *Player, index int) {
 	game.Sleeping = true
 	game.SelectedCards = &index
 	for _, player := range game.Players {
-		game.SendHighlightedCard(player)
+		if player.WS != nil {
+			game.SendHighlightedCard(player)
+		}
 
 		if reflect.DeepEqual(player.Selected, game.CzarSelection[index]) {
 			player.Points++
 			if player.Points == game.ScoreLimit {
 				for _, player := range game.Players {
-					game.SendWinnerSnackbar(player)
+					if player.WS != nil {
+						game.SendWinnerSnackbar(player)
+					}
 				}
 				game.UpdatePlayers()
 				return
@@ -251,10 +257,12 @@ func (game *Game) StartNextRound() {
 	}
 
 	for _, player := range game.Players {
-		game.SendBlackCard(player)
-		game.SendCzarSelection(player)
-		game.SendHighlightedCard(player)
-		player.SendHand()
+		if player.WS != nil {
+			game.SendBlackCard(player)
+			game.SendCzarSelection(player)
+			game.SendHighlightedCard(player)
+			player.SendHand()
+		}
 	}
 	game.UpdatePlayers()
 	game.Sleeping = false
