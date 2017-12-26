@@ -99,18 +99,7 @@ func (game *Game) SendBlackCard(player *Player) {
 
 // SelectCard selects a card to be played.
 func (game *Game) SelectCard(player *Player, card string) {
-	// TODO: handle when game.CzarSelecting
-
-	if len(card) > 1024 {
-		return
-	}
-
-	// czars cannot select cards
-	if player.Czar {
-		return
-	}
-
-	if len(player.Selected) == game.Deck.Black[0].Pick {
+	if len(card) > 1024 || len(player.Selected) == game.Deck.Black[0].Pick {
 		return
 	}
 
@@ -200,7 +189,7 @@ func (game *Game) SendCzarSelection(player *Player) {
 
 // SelectCzarCard selects a white card from the czar's selection.
 func (game *Game) SelectCzarCard(player *Player, index int) {
-	if game.SelectedCards != nil || !player.Czar || !game.CzarSelecting {
+	if !player.Czar || !game.CzarSelecting {
 		return
 	}
 
