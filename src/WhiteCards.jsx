@@ -13,8 +13,8 @@ class WhiteCards extends React.Component {
 					whiteSpace: "nowrap",
 				} : {}}
 			>
-				{this.props.czarSelection && this.props.czarSelection.map((cards, i) => (
-					<div key={cards} className="selection-wrapper">
+				{this.props.czarSelection && this.props.czarSelection.map((cards, i) => ( // eslint-disable-next-line
+					<div key={i} className="selection-wrapper">
 						{cards.map((card, j) => (
 							<div key={card === "" ? j : card} className="card-wrapper">
 								<div
