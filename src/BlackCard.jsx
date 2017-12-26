@@ -1,10 +1,16 @@
 import PropTypes from "prop-types"
-import React, {Fragment} from "react"
+import React from "react"
 
 class BlackCard extends React.Component {
 	render() {
 		return this.props.children && (
-			<Fragment>
+			<div
+				style={{
+					WebkitOverflowScrolling: "touch",
+					overflow: "auto",
+					whiteSpace: "nowrap",
+				}}
+			>
 				<div className="card-wrapper">
 					<div className="card black" dangerouslySetInnerHTML={{__html: this.props.children.text.replace(/_/g, "________")}} />
 				</div>
@@ -13,7 +19,7 @@ class BlackCard extends React.Component {
 						<div className="card white" dangerouslySetInnerHTML={{__html: card}} />
 					</div>
 				))}
-			</Fragment>
+			</div>
 		)
 	}
 }
