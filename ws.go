@@ -92,6 +92,10 @@ func handleWS(res http.ResponseWriter, req *http.Request) {
 			break
 		}
 
+		if game.Sleeping {
+			continue
+		}
+
 		switch res["id"].(string) {
 		case "start":
 			game.Start()

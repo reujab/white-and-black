@@ -4,18 +4,21 @@ import (
 	"math/rand"
 	"strings"
 	"sync"
+	"time"
 )
 
 // Game represents a game.
 type Game struct {
-	Started       bool
-	ScoreLimit    byte
+	Started    bool
+	ScoreLimit byte
+	Owner      string
+	Players    []*Player
+
 	Deck          Deck
-	Players       []*Player
-	Owner         string
 	CzarSelecting bool
 	CzarSelection [][]string
 	SelectedCards *int
+	Sleeping      bool
 }
 
 // UpdatePlayers sends an updated list of players to every connected websocket.
@@ -201,10 +204,16 @@ func (game *Game) SelectCzarCard(player *Player, index int) {
 		return
 	}
 
+	game.Sleeping = true
 	game.SelectedCards = &index
 	for _, player := range game.Players {
 		game.SendHighlightedCard(player)
 	}
+
+	go func() {
+		time.Sleep(time.Second * 5)
+		game.StartNextRound()
+	}()
 }
 
 // SendHighlightedCard sends the highlighted czar card to the specified player.
@@ -212,6 +221,40 @@ func (game *Game) SendHighlightedCard(player *Player) {
 	player.WS.WriteJSON(map[string]*int{
 		"highlighted": game.SelectedCards,
 	})
+}
+
+// StartNextRound starts the next round
+func (game *Game) StartNextRound() {
+	game.Deck.Black = game.Deck.Black[1:]
+	game.CzarSelecting = false
+	game.CzarSelection = nil
+	game.SelectedCards = nil
+
+	var isNextPlayer bool
+	for _, player := range game.Players {
+		// make next player card czar
+		if isNextPlayer {
+			isNextPlayer = false
+			player.Czar = true
+		} else if player.Czar {
+			isNextPlayer = true
+			player.Czar = false
+		}
+
+		player.Selected = nil
+	}
+	if isNextPlayer {
+		game.Players[0].Czar = true
+	}
+
+	for _, player := range game.Players {
+		game.SendBlackCard(player)
+		game.SendCzarSelection(player)
+		game.SendHighlightedCard(player)
+		player.SendHand()
+	}
+	game.UpdatePlayers()
+	game.Sleeping = false
 }
 
 func getGame(id string) *Game {
