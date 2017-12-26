@@ -9,6 +9,7 @@ type Player struct {
 	Czar     bool
 	Hand     []string
 	Selected []string
+	Points   byte
 }
 
 // SendHand sends the hand that the player has.

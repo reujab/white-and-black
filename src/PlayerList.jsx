@@ -39,6 +39,7 @@ class PlayerList extends React.Component {
 					<ListItemText
 						inset
 						primary={player.username}
+						secondary={`${player.points} Awesome Point${player.points === 1 ? "" : "s"}`}
 						style={{
 							overflow: "hidden",
 						}}

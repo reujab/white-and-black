@@ -20,7 +20,7 @@ class Game extends React.Component {
 			username: localStorage.username || "",
 			fillingBlank: false,
 
-			error: "",
+			snackbar: "",
 			players: [],
 			started: true, // assume game has started until told otherwise
 			blackCard: null,
@@ -39,7 +39,7 @@ class Game extends React.Component {
 	setUsername(username) {
 		localStorage.username = username
 		this.setState({
-			error: "",
+			snackbar: "",
 			username,
 		})
 
@@ -91,7 +91,7 @@ class Game extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<Snackbar open={!!this.state.error} message={this.state.error} />
+				<Snackbar open={!!this.state.snackbar} message={this.state.snackbar} />
 				<BlankCard show={this.state.fillingBlank} onChange={this.selectCard.bind(this)} />
 				<UsernamePicker username={this.state.username} onChange={this.setUsername.bind(this)} />
 

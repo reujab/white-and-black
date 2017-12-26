@@ -84,6 +84,7 @@ func handleWS(res http.ResponseWriter, req *http.Request) {
 	game.SendBlackCard(player)
 	game.SendCzarSelection(player)
 	game.SendHighlightedCard(player)
+	game.SendWinnerSnackbar(player)
 	player.SendHand()
 
 	for {

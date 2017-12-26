@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"reflect"
 	"strings"
 	"sync"
 	"time"
@@ -28,8 +29,9 @@ func (game *Game) UpdatePlayers() {
 		players = append(players, map[string]interface{}{
 			"username": player.Username,
 			"online":   player.WS != nil,
-			"czar":     player.Czar,
 			"owner":    game.Owner == player.Username,
+			"czar":     player.Czar,
+			"points":   player.Points,
 		})
 	}
 	for _, player := range game.Players {
@@ -197,7 +199,19 @@ func (game *Game) SelectCzarCard(player *Player, index int) {
 	game.SelectedCards = &index
 	for _, player := range game.Players {
 		game.SendHighlightedCard(player)
+
+		if reflect.DeepEqual(player.Selected, game.CzarSelection[index]) {
+			player.Points++
+			if player.Points == game.ScoreLimit {
+				for _, player := range game.Players {
+					game.SendWinnerSnackbar(player)
+				}
+				game.UpdatePlayers()
+				return
+			}
+		}
 	}
+	game.UpdatePlayers()
 
 	go func() {
 		time.Sleep(time.Second * 5)
@@ -244,6 +258,27 @@ func (game *Game) StartNextRound() {
 	}
 	game.UpdatePlayers()
 	game.Sleeping = false
+}
+
+// SendWinnerSnackbar sends the winning message to the specified player.
+func (game *Game) SendWinnerSnackbar(player *Player) {
+	// game will always be sleeping after a player wins
+	if !game.Sleeping {
+		return
+	}
+
+	var winner *Player
+	for _, player := range game.Players {
+		if player.Points == game.ScoreLimit {
+			winner = player
+			break
+		}
+	}
+	if winner != nil {
+		player.WS.WriteJSON(map[string]string{
+			"snackbar": winner.Username + " won!",
+		})
+	}
 }
 
 func getGame(id string) *Game {
