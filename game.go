@@ -69,19 +69,17 @@ func (game *Game) Start() {
 		}
 	}
 
-	// give every player a hand of cards
+	// assign random player card czar
+	game.Players[rand.Intn(len(game.Players))].Czar = true
+	game.UpdatePlayers()
+
+	game.Started = true
 	for _, player := range game.Players {
+		// give every player a hand of cards
 		player.Hand = game.Deck.White[:10]
 		game.Deck.White = game.Deck.White[10:]
 		player.SendHand()
-	}
 
-	// assign random player card czar
-	game.Players[rand.Intn(len(game.Players))].Czar = true
-
-	game.Started = true
-	game.UpdatePlayers()
-	for _, player := range game.Players {
 		game.SendGameState(player)
 		game.SendBlackCard(player)
 		if player.Czar {
