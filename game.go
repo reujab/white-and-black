@@ -36,7 +36,7 @@ func (game *Game) UpdatePlayers() {
 	}
 	for _, player := range game.Players {
 		if player.WS != nil {
-			player.WS.WriteJSON(map[string]interface{}{
+			player.Send(map[string]interface{}{
 				"players": players,
 			})
 		}
@@ -45,7 +45,7 @@ func (game *Game) UpdatePlayers() {
 
 // SendGameState sends an updated game state to the specified player.
 func (game *Game) SendGameState(player *Player) {
-	player.WS.WriteJSON(map[string]bool{
+	player.Send(map[string]bool{
 		"started": game.Started,
 	})
 }
@@ -91,7 +91,7 @@ func (game *Game) Start() {
 // SendBlackCard sends the current black card to the specified player.
 func (game *Game) SendBlackCard(player *Player) {
 	if game.Started {
-		player.WS.WriteJSON(map[string]BlackCard{
+		player.Send(map[string]BlackCard{
 			"blackCard": game.Deck.Black[0],
 		})
 	}
@@ -184,7 +184,7 @@ func (game *Game) SendCzarSelection(player *Player) {
 		}
 	}
 
-	player.WS.WriteJSON(map[string][][]string{
+	player.Send(map[string][][]string{
 		"czarSelection": czarSelection,
 	})
 }
@@ -225,7 +225,7 @@ func (game *Game) SelectCzarCard(player *Player, index int) {
 
 // SendHighlightedCard sends the highlighted czar card to the specified player.
 func (game *Game) SendHighlightedCard(player *Player) {
-	player.WS.WriteJSON(map[string]*int{
+	player.Send(map[string]*int{
 		"highlighted": game.SelectedCards,
 	})
 }
@@ -281,7 +281,7 @@ func (game *Game) SendWinnerSnackbar(player *Player) {
 		}
 	}
 	if winner != nil {
-		player.WS.WriteJSON(map[string]string{
+		player.Send(map[string]string{
 			"snackbar": winner.Username + " won!",
 		})
 	}

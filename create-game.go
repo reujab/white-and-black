@@ -20,7 +20,7 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 		Owner      string
 	}
 	err := json.NewDecoder(req.Body).Decode(&settings)
-	if err != nil || settings.ScoreLimit == 0 || len(settings.Decks) == 0 {
+	if err != nil || settings.ScoreLimit == 0 || len(settings.Decks) == 0 || len(settings.Owner) < 3 || len(settings.Owner) > 16 {
 		http.Error(res, "Bad Request", 400)
 		return
 	}
