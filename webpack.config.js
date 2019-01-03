@@ -8,8 +8,8 @@ shell.ln("-sf", "../favicon.png", "dist/favicon.png")
 module.exports = {
 	devtool: "source-map",
 	entry: {
-		index: "./src/Index.jsx",
-		game: "./src/Game.jsx",
+		index: "./http/Index.jsx",
+		game: "./http/Game.jsx",
 	},
 	output: {
 		filename: "[name].js",
