@@ -1,7 +1,11 @@
-import PropTypes from "prop-types"
-import React from "react"
+import * as React from "react"
 
-class MiniCard extends React.Component {
+interface Props {
+	children: number
+	color: string
+}
+
+class MiniCard extends React.Component<Props> {
 	render() {
 		return (
 			<div
@@ -26,11 +30,6 @@ class MiniCard extends React.Component {
 			</div>
 		)
 	}
-}
-
-MiniCard.propTypes = {
-	children: PropTypes.number.isRequired,
-	color: PropTypes.string.isRequired,
 }
 
 export default MiniCard

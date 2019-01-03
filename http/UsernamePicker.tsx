@@ -1,12 +1,20 @@
+import * as React from "react"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import Grid from "@material-ui/core/Grid"
-import PropTypes from "prop-types"
-import React from "react"
 import TextField from "@material-ui/core/TextField"
 
-class BlankCard extends React.Component {
+interface Props {
+	onChange: (string) => void
+	username: string
+}
+
+interface State {
+	input: string
+}
+
+class UsernamePicker extends React.Component<Props, State> {
 	constructor(props) {
 		super(props)
 
@@ -17,8 +25,8 @@ class BlankCard extends React.Component {
 
 	render() {
 		return (
-			<Dialog open={this.props.show}>
-				<DialogTitle>Blank card</DialogTitle>
+			<Dialog open={!this.props.username}>
+				<DialogTitle>Set username</DialogTitle>
 				<Grid
 					container
 					style={{
@@ -27,20 +35,29 @@ class BlankCard extends React.Component {
 						width: "100%",
 					}}
 				>
-					<Grid item xs={12}>
+					<Grid
+						item
+						xs={12}
+						sm={8}
+					>
 						<TextField
 							fullWidth
+							label="Username"
 							value={this.state.input}
-							InputProps={{inputProps: {maxLength: 1024}}}
+							InputProps={{ inputProps: { maxLength: 16 } }}
 							onChange={(e) => this.setState({
 								input: e.target.value,
 							})}
+							onKeyDown={(e) => e.key === "Enter" && this.props.onChange(this.state.input)}
 						/>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid
+						item
+						xs={6}
+						sm={4}
+					>
 						<Button
-							variant="contained"
-							disabled={!this.state.input.length}
+							disabled={this.state.input.length < 3}
 							onClick={() => this.props.onChange(this.state.input)}
 						>
 							Submit
@@ -52,9 +69,4 @@ class BlankCard extends React.Component {
 	}
 }
 
-BlankCard.propTypes = {
-	onChange: PropTypes.func.isRequired,
-	show: PropTypes.bool.isRequired,
-}
-
-export default BlankCard
+export default UsernamePicker

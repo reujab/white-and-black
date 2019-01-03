@@ -1,18 +1,29 @@
+import * as React from "react"
 import Button from "@material-ui/core/Button"
 import Checkbox from "@material-ui/core/Checkbox"
 import FormControlLabel from "@material-ui/core/FormControlLabel"
 import FormGroup from "@material-ui/core/FormGroup"
 import Grid from "@material-ui/core/Grid"
 import MiniCard from "./MiniCard"
-import PropTypes from "prop-types"
-import React from "react"
 import TextField from "@material-ui/core/TextField"
 import Tooltip from "@material-ui/core/Tooltip"
 import Typography from "@material-ui/core/Typography"
-import deckMetadata from "./cards/metadata"
+import deckMetadata from "../cards/metadata"
 import superagent from "superagent"
 
-class Settings extends React.Component {
+interface Props {
+	username: string
+}
+
+interface State {
+	scoreLimit: string
+	blankCards: string
+	decks: string[]
+	blackCards: number
+	whiteCards: number
+}
+
+class Settings extends React.Component<Props, State> {
 	constructor(props) {
 		super(props)
 
@@ -59,18 +70,20 @@ class Settings extends React.Component {
 					control={
 						<Checkbox
 							onChange={(e) => {
+								const blackCards = deck[2] as number
+								const whiteCards = deck[3] as number
 								if (e.target.checked) {
 									this.setState((state) => ({
-										blackCards: state.blackCards + deck[2],
-										whiteCards: state.whiteCards + deck[3],
+										blackCards: state.blackCards + blackCards,
+										whiteCards: state.whiteCards + whiteCards,
 									}))
-									this.state.decks.push(deck[0])
+									this.state.decks.push(deck[0] as string)
 								} else {
 									this.setState((state) => ({
-										blackCards: state.blackCards - deck[2],
-										whiteCards: state.whiteCards - deck[3],
+										blackCards: state.blackCards - blackCards,
+										whiteCards: state.whiteCards - whiteCards,
 									}))
-									this.state.decks.splice(this.state.decks.indexOf(deck[0]), 1)
+									this.state.decks.splice(this.state.decks.indexOf(deck[0] as string), 1)
 								}
 							}}
 						/>
@@ -100,7 +113,7 @@ class Settings extends React.Component {
 					<TextField
 						label="Score Limit"
 						value={this.state.scoreLimit}
-						onChange={(e) => this.setState({scoreLimit: e.target.value})}
+						onChange={(e) => this.setState({ scoreLimit: e.target.value })}
 						fullWidth
 					/>
 				</Grid>
@@ -112,7 +125,7 @@ class Settings extends React.Component {
 					<TextField
 						label="Blank Cards"
 						value={this.state.blankCards}
-						onChange={(e) => this.setState({blankCards: e.target.value})}
+						onChange={(e) => this.setState({ blankCards: e.target.value })}
 						fullWidth
 					/>
 				</Grid>
@@ -142,10 +155,6 @@ class Settings extends React.Component {
 			</Grid>
 		)
 	}
-}
-
-Settings.propTypes = {
-	username: PropTypes.string.isRequired,
 }
 
 export default Settings

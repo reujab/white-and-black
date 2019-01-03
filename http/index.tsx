@@ -1,11 +1,15 @@
 import "babel-polyfill"
+import * as React from "react"
 import Header from "./Header"
-import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 import Settings from "./Settings"
 import UsernamePicker from "./UsernamePicker"
 
-class Index extends React.Component {
+interface State {
+	username: string
+}
+
+class Index extends React.Component<any, State> {
 	constructor(props) {
 		super(props)
 
@@ -23,11 +27,11 @@ class Index extends React.Component {
 
 	render() {
 		return (
-			<Fragment>
+			<React.Fragment>
 				<UsernamePicker username={this.state.username} onChange={this.setUsername.bind(this)} />
 				<Header username={this.state.username} onUsernameChange={() => this.setUsername("")} />
 				<Settings username={this.state.username} />
-			</Fragment>
+			</React.Fragment>
 		)
 	}
 }

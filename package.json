@@ -3,26 +3,25 @@
   "version": "0.0.0",
   "description": "A Cards Against Humanity clone",
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-plugin-react": "^7.12.2",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "@types/superagent": "^3.8.5",
     "normalize.css": "^7.0.0",
     "parcel-bundler": "^1.11.0",
-    "sass": "^1.15.2"
+    "sass": "^1.15.2",
+    "typescript": "^3.2.2"
   },
   "dependencies": {
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.1",
     "babel-polyfill": "^6.26.0",
-    "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "superagent": "^3.8.3"
   },
   "scripts": {
-    "lint": "eslint http/*.jsx",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build -d dist http/index.html http/game.html",
-    "watch": "parcel watch -d dist http/index.html http/game.html"
+    "build": "parcel build -d dist http/*.html",
+    "watch": "parcel watch -d dist http/*.html"
   },
   "author": "",
   "license": "ISC"

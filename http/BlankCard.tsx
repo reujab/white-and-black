@@ -1,12 +1,20 @@
+import * as React from "react"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import Grid from "@material-ui/core/Grid"
-import PropTypes from "prop-types"
-import React from "react"
 import TextField from "@material-ui/core/TextField"
 
-class UsernamePicker extends React.Component {
+interface Props {
+	onChange: (string) => void
+	show: boolean
+}
+
+interface State {
+	input: string
+}
+
+class BlankCard extends React.Component<Props, State> {
 	constructor(props) {
 		super(props)
 
@@ -17,8 +25,8 @@ class UsernamePicker extends React.Component {
 
 	render() {
 		return (
-			<Dialog open={!this.props.username}>
-				<DialogTitle>Set username</DialogTitle>
+			<Dialog open={this.props.show}>
+				<DialogTitle>Blank card</DialogTitle>
 				<Grid
 					container
 					style={{
@@ -27,29 +35,20 @@ class UsernamePicker extends React.Component {
 						width: "100%",
 					}}
 				>
-					<Grid
-						item
-						xs={12}
-						sm={8}
-					>
+					<Grid item xs={12}>
 						<TextField
 							fullWidth
-							label="Username"
 							value={this.state.input}
-							InputProps={{inputProps: {maxLength: 16}}}
+							InputProps={{ inputProps: { maxLength: 1024 } }}
 							onChange={(e) => this.setState({
 								input: e.target.value,
 							})}
-							onKeyDown={(e) => e.key === "Enter" && this.props.onChange(this.state.input)}
 						/>
 					</Grid>
-					<Grid
-						item
-						xs={6}
-						sm={12 - 8}
-					>
+					<Grid item xs={12}>
 						<Button
-							disabled={this.state.input.length < 3}
+							variant="contained"
+							disabled={!this.state.input.length}
 							onClick={() => this.props.onChange(this.state.input)}
 						>
 							Submit
@@ -61,9 +60,4 @@ class UsernamePicker extends React.Component {
 	}
 }
 
-UsernamePicker.propTypes = {
-	onChange: PropTypes.func.isRequired,
-	username: PropTypes.string.isRequired,
-}
-
-export default UsernamePicker
+export default BlankCard

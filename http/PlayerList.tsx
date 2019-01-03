@@ -1,15 +1,22 @@
+import * as React from "react"
 import Button from "@material-ui/core/Button"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
-import PropTypes from "prop-types"
-import React from "react"
 import Star from "@material-ui/icons/Star"
 import Tooltip from "@material-ui/core/Tooltip"
 import Warning from "@material-ui/icons/Warning"
+import { Player } from "./Game"
 
-class PlayerList extends React.Component {
+interface Props {
+	onStart: () => void
+	players: Player[]
+	started: boolean
+	username: string
+}
+
+class PlayerList extends React.Component<Props> {
 	render() {
 		let owner = false
 		let online = 0
@@ -22,7 +29,6 @@ class PlayerList extends React.Component {
 				online++
 			}
 
-			/* eslint-disable indent */
 			return (
 				<ListItem key={player.username} button>
 					{!player.online && (
@@ -48,7 +54,6 @@ class PlayerList extends React.Component {
 					/>
 				</ListItem>
 			)
-			/* eslint-enable */
 		})
 
 		return (
@@ -70,18 +75,6 @@ class PlayerList extends React.Component {
 			</List>
 		)
 	}
-}
-
-PlayerList.propTypes = {
-	onStart: PropTypes.func.isRequired,
-	players: PropTypes.arrayOf(PropTypes.shape({
-		czar: PropTypes.bool.isRequired,
-		online: PropTypes.bool.isRequired,
-		owner: PropTypes.bool.isRequired,
-		username: PropTypes.string.isRequired,
-	})).isRequired,
-	started: PropTypes.bool.isRequired,
-	username: PropTypes.string.isRequired,
 }
 
 export default PlayerList

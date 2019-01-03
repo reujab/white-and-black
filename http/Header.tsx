@@ -1,11 +1,15 @@
+import * as React from "react"
 import AppBar from "@material-ui/core/AppBar"
-import PropTypes from "prop-types"
-import React from "react"
 import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 import favicon from "./favicon.png"
 
-class Header extends React.Component {
+interface Props {
+	onUsernameChange?: () => void
+	username: string
+}
+
+class Header extends React.Component<Props> {
 	render() {
 		return (
 			<AppBar
@@ -46,11 +50,6 @@ class Header extends React.Component {
 			</AppBar>
 		)
 	}
-}
-
-Header.propTypes = {
-	onUsernameChange: PropTypes.func,
-	username: PropTypes.string.isRequired,
 }
 
 export default Header

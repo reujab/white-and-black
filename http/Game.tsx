@@ -1,15 +1,40 @@
+import * as React from "react"
 import BlackCard from "./BlackCard"
 import BlankCard from "./BlankCard"
 import Grid from "@material-ui/core/Grid"
 import Header from "./Header"
 import PlayerList from "./PlayerList"
-import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
 import Snackbar from "@material-ui/core/Snackbar"
 import UsernamePicker from "./UsernamePicker"
 import WhiteCards from "./WhiteCards"
+import { IBlackCard } from "./common"
 
-class Game extends React.Component {
+interface State {
+	username: string
+	fillingBlank: boolean
+
+	snackbar: string
+	players: Player[]
+	started: boolean
+	blackCard: null | IBlackCard
+	hand: string[]
+	highlighted: null | string
+	selected: null | string[]
+	czarSelection: null | string[][]
+}
+
+export interface Player {
+	czar: boolean
+	online: boolean
+	owner: boolean
+	points: number
+	username: string
+}
+
+class Game extends React.Component<any, State> {
+	ws: WebSocket
+
 	constructor(props) {
 		super(props)
 
@@ -24,6 +49,7 @@ class Game extends React.Component {
 			hand: [],
 			highlighted: null,
 			selected: null,
+			czarSelection: null
 		}
 	}
 
@@ -87,7 +113,7 @@ class Game extends React.Component {
 
 	render() {
 		return (
-			<Fragment>
+			<React.Fragment>
 				<Snackbar open={!!this.state.snackbar} message={this.state.snackbar} />
 				<BlankCard show={this.state.fillingBlank} onChange={this.selectCard.bind(this)} />
 				<UsernamePicker username={this.state.username} onChange={this.setUsername.bind(this)} />
@@ -110,15 +136,15 @@ class Game extends React.Component {
 							username={this.state.username}
 							players={this.state.players}
 							started={this.state.started}
-							onStart={() => this.send({id: "start"})}
+							onStart={() => this.send({ id: "start" })}
 						/>
 					</Grid>
 					<Grid
 						item
 						xs={12}
-						md={12 - 3}
-						lg={12 - 2}
-						style={"orientation" in window ? {padding: 0} : {}}
+						md={9}
+						lg={10}
+						style={"orientation" in window ? { padding: 0 } : {}}
 					>
 						<BlackCard selected={this.state.czarSelection ? null : this.state.selected}>{this.state.blackCard}</BlackCard>
 						<WhiteCards
@@ -130,7 +156,7 @@ class Game extends React.Component {
 						/>
 					</Grid>
 				</Grid>
-			</Fragment>
+			</React.Fragment>
 		)
 	}
 }
