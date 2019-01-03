@@ -1,10 +1,10 @@
+import Button from "@material-ui/core/Button"
+import Dialog from "@material-ui/core/Dialog"
+import DialogTitle from "@material-ui/core/DialogTitle"
+import Grid from "@material-ui/core/Grid"
 import PropTypes from "prop-types"
 import React from "react"
-
-import Dialog, {DialogTitle} from "material-ui/Dialog"
-import Grid from "material-ui/Grid"
-import TextField from "material-ui/TextField"
-import Button from "material-ui/Button"
+import TextField from "@material-ui/core/TextField"
 
 class BlankCard extends React.Component {
 	constructor(props) {
@@ -39,7 +39,7 @@ class BlankCard extends React.Component {
 					</Grid>
 					<Grid item xs={12}>
 						<Button
-							raised
+							variant="contained"
 							disabled={!this.state.input.length}
 							onClick={() => this.props.onChange(this.state.input)}
 						>

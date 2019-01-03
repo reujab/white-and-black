@@ -1,10 +1,10 @@
+import Button from "@material-ui/core/Button"
+import Dialog from "@material-ui/core/Dialog"
+import DialogTitle from "@material-ui/core/DialogTitle"
+import Grid from "@material-ui/core/Grid"
 import PropTypes from "prop-types"
 import React from "react"
-
-import Dialog, {DialogTitle} from "material-ui/Dialog"
-import Grid from "material-ui/Grid"
-import TextField from "material-ui/TextField"
-import Button from "material-ui/Button"
+import TextField from "@material-ui/core/TextField"
 
 class UsernamePicker extends React.Component {
 	constructor(props) {
@@ -49,7 +49,6 @@ class UsernamePicker extends React.Component {
 						sm={12 - 8}
 					>
 						<Button
-							raised
 							disabled={this.state.input.length < 3}
 							onClick={() => this.props.onChange(this.state.input)}
 						>

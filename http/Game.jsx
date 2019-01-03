@@ -1,15 +1,12 @@
-import "./main.sass"
-
+import BlackCard from "./BlackCard"
+import BlankCard from "./BlankCard"
+import Grid from "@material-ui/core/Grid"
+import Header from "./Header"
+import PlayerList from "./PlayerList"
 import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
-
-import Snackbar from "material-ui/Snackbar"
-import BlankCard from "./BlankCard"
+import Snackbar from "@material-ui/core/Snackbar"
 import UsernamePicker from "./UsernamePicker"
-import Header from "./Header"
-import Grid from "material-ui/Grid"
-import PlayerList from "./PlayerList"
-import BlackCard from "./BlackCard"
 import WhiteCards from "./WhiteCards"
 
 class Game extends React.Component {

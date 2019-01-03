@@ -1,11 +1,9 @@
-import "./main.sass"
-
+import "babel-polyfill"
+import Header from "./Header"
 import React, {Fragment} from "react"
 import ReactDOM from "react-dom"
-
-import UsernamePicker from "./UsernamePicker"
-import Header from "./Header"
 import Settings from "./Settings"
+import UsernamePicker from "./UsernamePicker"
 
 class Index extends React.Component {
 	constructor(props) {

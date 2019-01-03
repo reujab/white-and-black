@@ -1,11 +1,13 @@
+import Button from "@material-ui/core/Button"
+import List from "@material-ui/core/List"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
 import PropTypes from "prop-types"
 import React from "react"
-
-import List, {ListItem, ListItemIcon, ListItemText} from "material-ui/List"
-import Tooltip from "material-ui/Tooltip"
-import Star from "material-ui-icons/Star"
-import Warning from "material-ui-icons/Warning"
-import Button from "material-ui/Button"
+import Star from "@material-ui/icons/Star"
+import Tooltip from "@material-ui/core/Tooltip"
+import Warning from "@material-ui/icons/Warning"
 
 class PlayerList extends React.Component {
 	render() {
@@ -54,7 +56,7 @@ class PlayerList extends React.Component {
 				{players}
 				{owner && !this.props.started && (
 					<Button
-						raised
+						variant="contained"
 						disabled={online < 3}
 						style={{
 							marginTop: 10,

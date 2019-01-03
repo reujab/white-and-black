@@ -1,17 +1,16 @@
-import deckMetadata from "./cards/metadata"
-import superagent from "superagent"
-
+import Button from "@material-ui/core/Button"
+import Checkbox from "@material-ui/core/Checkbox"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import FormGroup from "@material-ui/core/FormGroup"
+import Grid from "@material-ui/core/Grid"
+import MiniCard from "./MiniCard"
 import PropTypes from "prop-types"
 import React from "react"
-
-import Grid from "material-ui/Grid"
-import Typography from "material-ui/Typography"
-import TextField from "material-ui/TextField"
-import {FormGroup, FormControlLabel} from "material-ui/Form"
-import Tooltip from "material-ui/Tooltip"
-import Checkbox from "material-ui/Checkbox"
-import MiniCard from "./MiniCard"
-import Button from "material-ui/Button"
+import TextField from "@material-ui/core/TextField"
+import Tooltip from "@material-ui/core/Tooltip"
+import Typography from "@material-ui/core/Typography"
+import deckMetadata from "./cards/metadata"
+import superagent from "superagent"
 
 class Settings extends React.Component {
 	constructor(props) {
@@ -83,6 +82,7 @@ class Settings extends React.Component {
 		return (
 			<Grid
 				container
+				spacing={16}
 				style={{
 					margin: "auto",
 					maxWidth: 750,
@@ -90,7 +90,7 @@ class Settings extends React.Component {
 				}}
 			>
 				<Grid item xs={12}>
-					<Typography type="headline">General</Typography>
+					<Typography variant="headline">General</Typography>
 				</Grid>
 				<Grid
 					item
@@ -118,7 +118,7 @@ class Settings extends React.Component {
 				</Grid>
 
 				<Grid item xs={12}>
-					<Typography type="headline">Decks</Typography>
+					<Typography variant="headline">Decks</Typography>
 				</Grid>
 				<Grid item xs={12}>
 					<FormGroup row>
@@ -132,7 +132,7 @@ class Settings extends React.Component {
 
 				<Grid item xs={12}>
 					<Button
-						raised
+						variant="contained"
 						disabled={!this.isInputValid()}
 						onClick={this.submit.bind(this)}
 					>

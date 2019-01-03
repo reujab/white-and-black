@@ -35,7 +35,7 @@ func createGame(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		file, err := os.Open("src/cards/" + name + ".json")
+		file, err := os.Open("cards/" + name + ".json")
 		if err != nil {
 			http.Error(res, "Bad Request", 400)
 			return

@@ -1,3 +1,4 @@
+.cache
 /white-and-black
 dist/
 node_modules/

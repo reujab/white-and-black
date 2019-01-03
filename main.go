@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"math/rand"
 	"net/http"
@@ -23,8 +22,6 @@ type BlackCard struct {
 	Text string `json:"text"`
 }
 
-var templates = template.Must(template.ParseGlob("src/*.tmpl"))
-
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
@@ -38,19 +35,16 @@ func main() {
 
 func getRouter() *mux.Router {
 	router := mux.NewRouter()
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("dist"))))
-	router.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		die(templates.ExecuteTemplate(res, "index.tmpl", nil))
-	}).Methods("GET")
 	router.HandleFunc("/create-game", createGame).Methods("POST")
 	router.HandleFunc(`/{id:[a-z\d]{20}}`, func(res http.ResponseWriter, req *http.Request) {
 		if getGame(mux.Vars(req)["id"]) == nil {
 			http.NotFound(res, req)
 		} else {
-			die(templates.ExecuteTemplate(res, "game.tmpl", nil))
+			http.ServeFile(res, req, "dist/game.html")
 		}
 	}).Methods("GET")
 	router.HandleFunc(`/{id:[a-z\d]{20}}/ws`, handleWS).Methods("GET")
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("dist")))
 	return router
 }
 

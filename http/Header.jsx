@@ -1,10 +1,9 @@
+import AppBar from "@material-ui/core/AppBar"
 import PropTypes from "prop-types"
 import React from "react"
-
-import AppBar from "material-ui/AppBar"
-import Toolbar from "material-ui/Toolbar"
-import IconButton from "material-ui/IconButton"
-import Typography from "material-ui/Typography"
+import Toolbar from "@material-ui/core/Toolbar"
+import Typography from "@material-ui/core/Typography"
+import favicon from "./favicon.png"
 
 class Header extends React.Component {
 	render() {
@@ -16,26 +15,18 @@ class Header extends React.Component {
 				}}
 			>
 				<Toolbar>
-					<IconButton
-						disabled
+					<img
+						src={favicon}
 						style={{
-							borderRadius: 0,
-							marginRight: 10,
+							height: `${64 - 4 * 2}px`,
+							marginRight: "10px",
 						}}
-					>
-						<img
-							src="/static/favicon.png"
-							style={{
-								width: "100%",
-							}}
-						/>
-					</IconButton>
+					/>
 					<Typography
-						type="title"
+						variant="title"
 						color="inherit"
 						style={{
 							flexGrow: 1,
-							marginRight: 10,
 							whiteSpace: "nowrap",
 						}}
 					>
