@@ -21,7 +21,7 @@ type Player struct {
 func (player *Player) Send(data interface{}) {
 	player.Lock()
 	defer player.Unlock()
-	player.Send(data)
+	player.WS.WriteJSON(data)
 }
 
 // SendHand sends the hand that the player has.
