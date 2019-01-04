@@ -21,7 +21,8 @@
   },
   "scripts": {
     "build": "parcel build -d dist http/*.html",
-    "watch": "parcel watch -d dist http/*.html"
+    "watch": "parcel watch -d dist http/*.html",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "ISC"
