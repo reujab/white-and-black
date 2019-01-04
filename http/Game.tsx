@@ -66,7 +66,7 @@ class Game extends React.Component<any, State> {
 			username,
 		})
 
-		this.ws = new WebSocket(`ws://${location.host + location.pathname}/ws`)
+		this.ws = new WebSocket(`ws${location.protocol === "https:" ? "s" : ""}://${location.host + location.pathname}/ws`)
 		this.ws.onopen = () => {
 			this.ws.send(username)
 		}
