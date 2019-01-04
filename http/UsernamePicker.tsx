@@ -29,6 +29,7 @@ class UsernamePicker extends React.Component<Props, State> {
 				<DialogTitle>Set username</DialogTitle>
 				<Grid
 					container
+					spacing={8}
 					style={{
 						margin: 0,
 						padding: 20,
@@ -42,7 +43,7 @@ class UsernamePicker extends React.Component<Props, State> {
 					>
 						<TextField
 							fullWidth
-							label="Username"
+							placeholder="Username"
 							value={this.state.input}
 							InputProps={{ inputProps: { maxLength: 16 } }}
 							onChange={(e) => this.setState({
