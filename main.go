@@ -4,6 +4,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -27,8 +28,13 @@ func init() {
 }
 
 func main() {
-	log.Println("Listening to :8080")
-	panic(http.ListenAndServe(":8080", httplogger.Wrap(getRouter().ServeHTTP, func(req *httplogger.Request) {
+	port := "8080"
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
+
+	log.Println("Listening to :" + port)
+	panic(http.ListenAndServe(":"+port, httplogger.Wrap(getRouter().ServeHTTP, func(req *httplogger.Request) {
 		log.Println(req.IP, req.Method, req.URL, req.Status, req.Time)
 	})))
 }
