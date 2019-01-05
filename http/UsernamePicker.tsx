@@ -58,6 +58,7 @@ class UsernamePicker extends React.Component<Props, State> {
 						sm={4}
 					>
 						<Button
+							fullWidth
 							disabled={this.state.input.length < 3}
 							onClick={() => this.props.onChange(this.state.input)}
 						>
