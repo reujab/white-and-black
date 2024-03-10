@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cah
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cah-deployment
+  namespace: cah
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cah
+  template:
+    metadata:
+      labels:
+        app: cah
+    spec:
+      containers:
+      - name: cah
+        image: localhost/cah:v1
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cah-service
+  namespace: cah
+spec:
+  selector:
+    app: cah
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+  name: cah-ingress
+  namespace: cah
+spec:
+  rules:
+  - host: cah.cloud.badpacket.in
+    http:
+      paths:
+      - backend:
+          service:
+            name: cah-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - cah.cloud.badpacket.in
+    secretName: your-tls-secret
